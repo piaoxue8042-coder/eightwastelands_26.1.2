@@ -1,0 +1,17 @@
+{
+  "itemGroup.eightwastelands": "Example Mod Tab",
+  "block.eightwastelands.example_block": "Example Block",
+  "item.eightwastelands.example_item": "Example Item",
+
+  "eightwastelands.configuration.title": "eight_wastelands Configs",
+  "eightwastelands.configuration.section.eightwastelands.common.toml": "eight_wastelands Configs",
+  "eightwastelands.configuration.section.eightwastelands.common.toml.title": "eight_wastelands Configs",
+  "eightwastelands.configuration.items": "Item List",
+  "eightwastelands.configuration.logDirtBlock": "Log Dirt Block",
+  "eightwastelands.configuration.magicNumberIntroduction": "Magic Number Text",
+  "eightwastelands.configuration.magicNumber": "Magic Number",
+
+  "curios.identifier.calamity": "Calamity",
+  "block.eightwastelands.lou_zhen": "Lou Zhen"
+
+}

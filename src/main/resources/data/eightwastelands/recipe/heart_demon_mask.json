@@ -1,0 +1,20 @@
+{
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "WSW",
+                    "BHB",
+                    "ENE"
+                ],
+    "key":  {
+                "W":  "minecraft:wither_skeleton_skull",
+                "S":  "minecraft:soul_lantern",
+                "B":  "minecraft:wither_rose",
+                "H":  "minecraft:carved_pumpkin",
+                "E":  "minecraft:echo_shard",
+                "N":  "minecraft:nether_star"
+            },
+    "result":  {
+                   "id":  "eightwastelands:heart_demon_mask",
+                   "count":  1
+               }
+}

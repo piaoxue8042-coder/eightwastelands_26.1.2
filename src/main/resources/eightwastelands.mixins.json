@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.px8042.eightwastelands.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

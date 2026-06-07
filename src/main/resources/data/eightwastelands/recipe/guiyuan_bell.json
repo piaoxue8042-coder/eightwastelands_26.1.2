@@ -1,0 +1,19 @@
+{
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    " C ",
+                    "WBW",
+                    "DLD"
+                ],
+    "key":  {
+                "C":  "minecraft:copper_ingot",
+                "W":  "minecraft:wind_charge",
+                "B":  "minecraft:weathered_copper_bulb",
+                "D":  "minecraft:dragon_breath",
+                "L":  "minecraft:lightning_rod"
+            },
+    "result":  {
+                   "id":  "eightwastelands:guiyuan_bell",
+                   "count":  1
+               }
+}

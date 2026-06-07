@@ -1,0 +1,6 @@
+{
+    "model":  {
+                  "type":  "minecraft:model",
+                  "model":  "eightwastelands:item/heart_demon_mask"
+              }
+}

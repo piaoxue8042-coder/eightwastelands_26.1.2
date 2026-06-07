@@ -1,0 +1,19 @@
+{
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "FFF",
+                    "PDT",
+                    " S "
+                ],
+    "key":  {
+                "F":  "minecraft:feather",
+                "P":  "minecraft:enchanted_book",
+                "D":  "minecraft:dragon_breath",
+                "T":  "minecraft:turtle_helmet",
+                "S":  "minecraft:oak_sign"
+            },
+    "result":  {
+                   "id":  "eightwastelands:summer_fan",
+                   "count":  1
+               }
+}
