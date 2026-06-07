@@ -1,0 +1,18 @@
+{
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "EAE",
+                    "IBI",
+                    "III"
+                ],
+    "key":  {
+                "E":  "minecraft:emerald",
+                "A":  "minecraft:anvil",
+                "I":  "minecraft:iron_block",
+                "B":  "minecraft:amethyst_block"
+            },
+    "result":  {
+                   "id":  "eightwastelands:lou_zhen",
+                   "count":  1
+               }
+}

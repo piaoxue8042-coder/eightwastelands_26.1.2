@@ -1,0 +1,18 @@
+{
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "SWP",
+                    "NNN",
+                    " N "
+                ],
+    "key":  {
+                "S":  "minecraft:skeleton_skull",
+                "W":  "minecraft:wither_skeleton_skull",
+                "P":  "minecraft:piglin_head",
+                "N":  "minecraft:netherite_block"
+            },
+    "result":  {
+                   "id":  "eightwastelands:sheng_zhuang",
+                   "count":  1
+               }
+}

@@ -1,0 +1,20 @@
+{
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "WCW",
+                    "RSR",
+                    "NBN"
+                ],
+    "key":  {
+                "W":  "minecraft:wind_charge",
+                "C":  "minecraft:mace",
+                "R":  "minecraft:redstone",
+                "S":  "minecraft:skeleton_skull",
+                "N":  "minecraft:netherite_ingot",
+                "B":  "minecraft:dragon_breath"
+            },
+    "result":  {
+                   "id":  "eightwastelands:blood_skull",
+                   "count":  1
+               }
+}

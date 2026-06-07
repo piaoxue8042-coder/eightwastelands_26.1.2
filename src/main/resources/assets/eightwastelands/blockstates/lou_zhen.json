@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "eightwastelands:block/lou_zhen"
+    },
+    "facing=east": {
+      "model": "eightwastelands:block/lou_zhen",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "eightwastelands:block/lou_zhen",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "eightwastelands:block/lou_zhen",
+      "y": 270
+    }
+  }
+}
