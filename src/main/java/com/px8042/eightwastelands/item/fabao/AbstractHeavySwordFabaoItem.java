@@ -1,0 +1,14 @@
+package com.px8042.eightwastelands.item.fabao;
+
+public abstract class AbstractHeavySwordFabaoItem extends AbstractSwordFabaoItem {
+
+    public static final int DEFAULT_COOLDOWN_TICKS = 15 * 20;
+
+    protected AbstractHeavySwordFabaoItem(Properties properties, float baseDamage, double attackRange) {
+        this(properties, baseDamage, DEFAULT_COOLDOWN_TICKS, attackRange);
+    }
+
+    protected AbstractHeavySwordFabaoItem(Properties properties, float baseDamage, int cooldownTicks, double attackRange) {
+        super(properties, baseDamage, cooldownTicks, attackRange);
+    }
+}

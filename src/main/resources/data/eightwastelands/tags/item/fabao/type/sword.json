@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:fabao/type/sword/long_sword",
+    "#eightwastelands:fabao/type/sword/heavy_sword",
+    "#eightwastelands:fabao/type/sword/sword_array"
+  ]
+}

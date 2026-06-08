@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:fabao/type/seal/suppressing_seal",
+    "#eightwastelands:fabao/type/seal/mountain_seal",
+    "#eightwastelands:fabao/type/seal/forbidden_seal"
+  ]
+}

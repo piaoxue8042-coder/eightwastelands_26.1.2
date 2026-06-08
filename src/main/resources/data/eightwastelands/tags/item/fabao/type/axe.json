@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:fabao/type/axe/spinning_axe",
+    "#eightwastelands:fabao/type/axe/battle_axe",
+    "#eightwastelands:fabao/type/axe/giant_axe"
+  ]
+}

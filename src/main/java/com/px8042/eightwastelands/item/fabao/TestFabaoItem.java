@@ -8,10 +8,10 @@ import net.minecraft.world.item.component.TooltipDisplay;
 
 import java.util.function.Consumer;
 
-public class TestFabaoItem extends AbstractFabaoItem {
+public class TestFabaoItem extends AbstractLongSwordFabaoItem {
 
     public TestFabaoItem(Properties properties) {
-        super(properties, 6.0F, 2 * 20, 16.0D);
+        super(properties, 6.0F, 16.0D);
     }
 
     @Override

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:fabao/type/sword",
+    "#eightwastelands:fabao/type/blade",
+    "#eightwastelands:fabao/type/axe",
+    "#eightwastelands:fabao/type/needle",
+    "#eightwastelands:fabao/type/spear",
+    "#eightwastelands:fabao/type/seal"
+  ]
+}

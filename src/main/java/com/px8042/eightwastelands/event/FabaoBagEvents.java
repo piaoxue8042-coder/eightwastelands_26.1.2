@@ -15,6 +15,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -50,9 +51,13 @@ public class FabaoBagEvents {
                 continue;
             }
 
-            Monster target = findNearestTarget(player, fabaoItem.getAttackRange(fabaoStack));
-            if (target != null) {
-                attack(player, bagStack, slot, fabaoStack, fabaoItem, target, gameTime);
+            List<Monster> targets = findTargets(
+                    player,
+                    fabaoItem.getAttackRange(fabaoStack),
+                    fabaoItem.getMaxPierceTargets(fabaoStack)
+            );
+            if (!targets.isEmpty()) {
+                attack(player, bagStack, slot, fabaoStack, fabaoItem, targets, gameTime);
             }
         }
     }
@@ -76,7 +81,7 @@ public class FabaoBagEvents {
         return stack.isEmpty() ? Optional.empty() : Optional.of(stack);
     }
 
-    private Monster findNearestTarget(ServerPlayer player, double range) {
+    private List<Monster> findTargets(ServerPlayer player, double range, int maxTargets) {
         double rangeSqr = range * range;
         return player.level()
                 .getEntitiesOfClass(
@@ -85,8 +90,9 @@ public class FabaoBagEvents {
                         monster -> monster.isAlive() && player.distanceToSqr(monster) <= rangeSqr
                 )
                 .stream()
-                .min(Comparator.comparingDouble(player::distanceToSqr))
-                .orElse(null);
+                .sorted(Comparator.comparingDouble(player::distanceToSqr))
+                .limit(Math.max(1, maxTargets))
+                .toList();
     }
 
     private void attack(
@@ -95,31 +101,70 @@ public class FabaoBagEvents {
             int bagSlot,
             ItemStack fabaoStack,
             IFabaoItem fabaoItem,
-            Monster target,
+            List<Monster> targets,
             long gameTime
     ) {
         if (!(player.level() instanceof ServerLevel serverLevel)) {
             return;
         }
 
-        DamageSource source = serverLevel.damageSources().playerAttack(player);
+        boolean hitAnyTarget = false;
+        int attackCount = Math.max(1, fabaoItem.getAttackCount(fabaoStack));
+
+        for (Monster target : targets) {
+            for (int attack = 0; attack < attackCount; attack++) {
+                if (!target.isAlive()) {
+                    break;
+                }
+
+                if (attackSingleTarget(serverLevel, player, fabaoStack, fabaoItem, target)) {
+                    hitAnyTarget = true;
+                }
+            }
+        }
+
+        if (hitAnyTarget) {
+            FabaoBagItem.setCooldownEnd(bagStack, bagSlot, gameTime + fabaoItem.getCooldownTicks(fabaoStack));
+        }
+    }
+
+    private boolean attackSingleTarget(
+            ServerLevel serverLevel,
+            ServerPlayer player,
+            ItemStack fabaoStack,
+            IFabaoItem fabaoItem,
+            Monster target
+    ) {
+        fabaoItem.beforeAutoAttack(player, fabaoStack, target);
+
+        DamageSource source = fabaoItem.createDamageSource(serverLevel, player, fabaoStack, target);
+        float baseDamage = fabaoItem.modifyBaseDamage(
+                player,
+                fabaoStack,
+                target,
+                fabaoItem.getBaseDamage(fabaoStack)
+        );
         float damage = EnchantmentHelper.modifyDamage(
                 serverLevel,
                 fabaoStack,
                 target,
                 source,
-                fabaoItem.getBaseDamage(fabaoStack)
+                baseDamage
         );
+        damage = fabaoItem.modifyFinalDamage(player, fabaoStack, target, source, damage);
 
         if (damage <= 0.0F) {
-            return;
+            return false;
         }
 
         target.invulnerableTime = 0;
-        if (target.hurtServer(serverLevel, source, damage)) {
-            EnchantmentHelper.doPostAttackEffectsWithItemSource(serverLevel, target, source, fabaoStack);
-            fabaoItem.onAutoAttack(player, fabaoStack, target);
-            FabaoBagItem.setCooldownEnd(bagStack, bagSlot, gameTime + fabaoItem.getCooldownTicks(fabaoStack));
+        if (!target.hurtServer(serverLevel, source, damage)) {
+            return false;
         }
+
+        EnchantmentHelper.doPostAttackEffectsWithItemSource(serverLevel, target, source, fabaoStack);
+        fabaoItem.onAutoAttack(player, fabaoStack, target);
+        fabaoItem.afterAutoAttack(player, fabaoStack, target, source, damage);
+        return true;
     }
 }

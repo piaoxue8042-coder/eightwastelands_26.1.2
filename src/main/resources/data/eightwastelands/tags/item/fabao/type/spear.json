@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:fabao/type/spear/long_spear",
+    "#eightwastelands:fabao/type/spear/throwing_spear",
+    "#eightwastelands:fabao/type/spear/spear_shadow"
+  ]
+}

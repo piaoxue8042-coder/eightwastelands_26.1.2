@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:fabao/type/needle/physical_needle",
+    "#eightwastelands:fabao/type/needle/negative_needle",
+    "#eightwastelands:fabao/type/needle/control_needle"
+  ]
+}
