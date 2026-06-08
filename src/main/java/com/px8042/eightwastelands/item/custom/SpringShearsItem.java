@@ -26,8 +26,8 @@ public class SpringShearsItem extends Item implements ICurioItem {
     private static final float MIN_REMAINING_HEALTH = 1.0F;
     public static final float FATE_CUT_IMMEDIATE_MAX_HEALTH_RATIO = 0.8F;
 
-    public static final int FATE_CUT_WEAKNESS_AMPLIFIER = 1; // 虚弱 II
-    public static final int FATE_CUT_WITHER_AMPLIFIER = 0;   // 凋零 I
+    public static final int FATE_CUT_WEAKNESS_AMPLIFIER = 1; 
+    public static final int FATE_CUT_WITHER_AMPLIFIER = 0;   
 
     public SpringShearsItem(Properties properties) {
         super(properties);
@@ -78,7 +78,7 @@ public class SpringShearsItem extends Item implements ICurioItem {
         );
 
         player.sendOverlayMessage(
-                Component.literal("寿尽已反转：天命之线已被剪断。"));
+                Component.translatable("message.eightwastelands.life_exhaustion.reversed"));
     }
 
     @Override
@@ -91,7 +91,7 @@ public class SpringShearsItem extends Item implements ICurioItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 春剪裁命 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.spring_shears.title")
                 .withStyle(style -> style.withColor(0x99FF99).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

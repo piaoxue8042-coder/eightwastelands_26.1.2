@@ -26,25 +26,16 @@ import java.util.List;
 
 public class NineHeavensPunishmentItem extends Item implements ICurioItem {
 
-    //常量
-    private static final int TRIBULATION_EFFECT_DURATION = 40;   //用于添加九重天劫的效果
+    
+    private static final int TRIBULATION_EFFECT_DURATION = 40;   
 
     private static final String NEXT_LIGHTNING_TIME =
             "eightwastelands_next_lightning_time";
 
 
-
     private static final int MIN_LIGHTNING_DELAY = 35 * 20;
     private static final int MAX_LIGHTNING_DELAY = 45 * 20;
     private static final int HARDCORE_LIGHTNING_DELAY = 20 * 20;
-
-
-
-
-
-
-
-
 
 
     public static final String GOLDEN_APPLE_REGEN_BLOCK_TIME =
@@ -58,7 +49,6 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
             );
 
     private static final double LIFE_EXHAUSTION_MAX_HEALTH_MULTIPLIER = -0.5D;
-
 
 
     public static final Identifier WIND_EVIL_ARMOR_MODIFIER_ID =
@@ -75,8 +65,8 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
 
     private static final double WIND_EVIL_ATTRIBUTE_MULTIPLIER = -1.0D;
 
-    private static final float LIGHTNING_DAMAGE_MAX_HEALTH_RATIO = 0.5F;   //天劫雷电伤害,固定打玩家最大生命的一半血
-    //下面是反转常量,
+    private static final float LIGHTNING_DAMAGE_MAX_HEALTH_RATIO = 0.5F;   
+    
     public static final String LUCK_DEPRIVATION_REVERSED =
             "eightwastelands_reversed_luck_deprivation";
     public static final String WIND_EVIL_REVERSED =
@@ -96,59 +86,55 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
     public static final String HEAVENLY_TRIBULATION_REVERSED =
             "eightwastelands_reversed_heavenly_tribulation";
     private static final int THUNDER_SEAL_LIGHTNING_DELAY = 2 * 20;
-    private static final float THUNDER_SEAL_LIGHTNING_DAMAGE = 100.0F;  //渡劫时所用的雷的伤害
+    private static final float THUNDER_SEAL_LIGHTNING_DAMAGE = 100.0F;  
 
 
+    
 
-
-
-    //下面是方法
-
-    //下面做反转的方法
-    //反转夺运
+    
+    
     public static boolean isLuckDeprivationReversed(Player player) {
         return player.getPersistentData().getBooleanOr(LUCK_DEPRIVATION_REVERSED, false);
     }
-    //反转风煞
+    
     public static boolean isWindEvilReversed(Player player) {
         return player.getPersistentData().getBooleanOr(WIND_EVIL_REVERSED, false);
     }
-    //反转寿尽
+    
     public static boolean isLifeExhaustionReversed(Player player) {
         return player.getPersistentData().getBooleanOr(LIFE_EXHAUSTION_REVERSED, false);
     }
-    //心魔
+    
     public static boolean isHeartDemonReversed(Player player) {
         return player.getPersistentData().getBooleanOr(HEART_DEMON_REVERSED, false);
     }
-    //绝灵
+    
     public static boolean isSpiritExhaustionReversed(Player player) {
         return player.getPersistentData().getBooleanOr(SPIRIT_EXHAUSTION_REVERSED, false);
     }
-    //枯血
+    
     public static boolean isWitheredBloodReversed(Player player) {
         return player.getPersistentData().getBooleanOr(WITHERED_BLOOD_REVERSED, false);
     }
-    // 因果
+    
     public static boolean isKarmaReversed(Player player) {
         return player.getPersistentData().getBooleanOr(KARMA_REVERSED, false);
     }
-    // 地灾
+    
     public static boolean isEarthDisasterReversed(Player player) {
         return player.getPersistentData().getBooleanOr(EARTH_DISASTER_REVERSED, false);
     }
-    //天劫
-    // 天劫
+    
+    
     public static boolean isHeavenlyTribulationReversed(Player player) {
         return player.getPersistentData().getBooleanOr(HEAVENLY_TRIBULATION_REVERSED, false);
     }
 
 
-
     public NineHeavensPunishmentItem(Properties properties) {
         super(properties);
     }
-    //穿戴和取下
+    
     @Override
     public boolean canEquip(SlotContext slotContext, ItemStack stack) {
         return slotContext.identifier().equals("calamity");
@@ -162,7 +148,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
 
         return player.isCreative() || player.isSpectator();
     }
-    //添加九种负面效果的显示
+    
     private void applyTribulationMobEffects(Player player) {
 
         if (player.level().isClientSide()) {
@@ -288,7 +274,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
     }
 
 
-    //下面是实时检测诅咒触发
+    
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
@@ -302,11 +288,10 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
         }
         applyTribulationMobEffects(player);
 
-        //客户端
+        
 
 
-
-        //服务端
+        
 
         if (!(player.level() instanceof ServerLevel level)) {
             return;
@@ -317,8 +302,6 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
         }
 
 
-
-
         if (player.hasEffect(ModMobEffects.LIFE_EXHAUSTION)) {
             tickLifeExhaustion(player);
         }
@@ -327,7 +310,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
             tickWindEvil(player);
         }
     }
-    //下面给九重天罚做一个描述,就是鼠标移上去能看的
+    
     @Override
     public void appendHoverText(
             ItemStack stack,
@@ -337,7 +320,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
             TooltipFlag tooltipFlag
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
-        tooltipComponents.accept(Component.literal("✦ 九劫齐降 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.nine_heavens_punishment.title")
                 .withStyle(style -> style.withColor(0x550000).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(
@@ -346,7 +329,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
 
         tooltipComponents.accept(Component.empty());
 
-        tooltipComponents.accept(Component.literal("滴答……血色的纹路在物品上蔓延。")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.nine_heavens_punishment.flavor")
                 .withStyle(style -> style.withColor(0x550000).withItalic(true)));
 
         tooltipComponents.accept(Component.empty());
@@ -389,13 +372,6 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
     }
 
 
-
-
-
-
-
-
-
     private void summonLightningOnPlayer(Player player, ServerLevel level) {
 
         LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(level, EntitySpawnReason.TRIGGERED);
@@ -410,7 +386,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
                 player.getZ()
         );
 
-        // 只显示闪电，不让原版闪电自己造成伤害
+        
         lightning.setVisualOnly(true);
 
         level.addFreshEntity(lightning);
@@ -453,7 +429,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
         return level.getServer().isHardcore();
     }
 
-    //tick方法
+    
 
 
     private void tickLifeExhaustion(Player player) {
@@ -492,7 +468,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
 
         long nextLightningTime = data.getLongOr(NEXT_LIGHTNING_TIME, 0L);
 
-        // 戴上天雷印后，如果原本随机雷还要等很久，就立刻压缩到 2 秒内
+        
         if (hasHeavenlyThunderSealEquipped(player)
                 && !isHeavenlyTribulationReversed(player)
                 && nextLightningTime - gameTime > THUNDER_SEAL_LIGHTNING_DELAY) {
@@ -532,7 +508,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
 
         return found[0];
     }
-    //风煞
+    
     private void tickWindEvil(Player player) {
 
         AttributeInstance armor = player.getAttribute(Attributes.ARMOR);

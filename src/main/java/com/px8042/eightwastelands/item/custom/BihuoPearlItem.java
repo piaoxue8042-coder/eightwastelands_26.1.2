@@ -23,7 +23,6 @@ public class BihuoPearlItem extends AbstractHeavenlyArtifactItem {
     }
 
 
-
     @Override
     public void appendHoverText(
             ItemStack stack,
@@ -34,7 +33,7 @@ public class BihuoPearlItem extends AbstractHeavenlyArtifactItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 仙器 · 避火珠 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.bihuo_pearl.title")
                 .withStyle(style -> style.withColor(0xFFAA33).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

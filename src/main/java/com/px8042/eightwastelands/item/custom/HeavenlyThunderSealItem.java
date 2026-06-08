@@ -25,7 +25,7 @@ public class HeavenlyThunderSealItem extends Item implements ICurioItem {
 
     public static final double THUNDER_STRIKE_RANGE = 25.0D;
 
-    public static final float THUNDER_STRIKE_DAMAGE = 200.0F;  //最后这三个代表渡劫后劈怪的雷的cd,范围和伤害
+    public static final float THUNDER_STRIKE_DAMAGE = 200.0F;  
 
     public HeavenlyThunderSealItem(Properties properties) {
         super(properties);
@@ -56,7 +56,7 @@ public class HeavenlyThunderSealItem extends Item implements ICurioItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 九雷归印 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.heavenly_thunder_seal.title")
                 .withStyle(style -> style.withColor(0x33CCFF).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

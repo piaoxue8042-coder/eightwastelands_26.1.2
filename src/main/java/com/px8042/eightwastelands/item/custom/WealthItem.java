@@ -53,7 +53,7 @@ public class WealthItem extends Item implements ICurioItem {
             );
 
             player.sendOverlayMessage(
-                    net.minecraft.network.chat.Component.literal("夺运已反转：天道不再夺取你的收获。"));
+                    net.minecraft.network.chat.Component.translatable("message.eightwastelands.luck_deprivation.reversed"));
         }
     }
     @Override

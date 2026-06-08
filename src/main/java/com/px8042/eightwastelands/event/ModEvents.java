@@ -65,25 +65,19 @@ import net.minecraft.tags.DamageTypeTags;
 import java.util.Comparator;
 
 
-
-
-
-
-
 public class ModEvents {
-    private static final double LUCK_DEPRIVATION_RANGE = 32.0D;//控制夺运范围
+    private static final double LUCK_DEPRIVATION_RANGE = 32.0D;
     private static final String HAS_RECEIVED_NINE_HEAVENS_PUNISHMENT =
-            "eightwastelands_has_received_nine_heavens_punishment";  //添加首次获得标记
+            "eightwastelands_has_received_nine_heavens_punishment";  
     private static final String SHOULD_RESTORE_NINE_HEAVENS_PUNISHMENT =
-            "eightwastelands_should_restore_nine_heavens_punishment";  //用于制作死亡时不掉落
-    private static final float WITHERED_BLOOD_REVERSE_MAX_HEALTH = 100.0F;//用于反转绝灵,到达血量即可反转
+            "eightwastelands_should_restore_nine_heavens_punishment";  
+    private static final float WITHERED_BLOOD_REVERSE_MAX_HEALTH = 100.0F;
     private static final int LOU_ZHEN_REPAIR_AMOUNT = 100;
-    private static final int LOU_ZHEN_REPAIR_LEVEL_COST = 3;  //楼砧常量
+    private static final int LOU_ZHEN_REPAIR_LEVEL_COST = 3;  
 
 
-
-    //上面是常量
-    //让挖掘疲劳进绝灵里
+    
+    
     @SubscribeEvent
     public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 
@@ -100,7 +94,7 @@ public class ModEvents {
         event.setNewSpeed(event.getOriginalSpeed() * 0.09F);
     }
 
-    //右键楼砧事件
+    
     @SubscribeEvent
     public void onLouZhenRepair(PlayerInteractEvent.RightClickBlock event) {
 
@@ -128,7 +122,7 @@ public class ModEvents {
 
         if (!ArtifactDurabilityHelper.isDamaged(stack)) {
             player.sendOverlayMessage(
-                    Component.literal("楼砧：这件仙器无需修复。"));
+                    Component.translatable("message.eightwastelands.lou_zhen.no_repair_needed"));
             event.setCancellationResult(InteractionResult.SUCCESS);
             return;
         }
@@ -137,14 +131,14 @@ public class ModEvents {
 
             if (!hasEmerald(player)) {
                 player.sendOverlayMessage(
-                        Component.literal("楼砧：修复仙器需要 1 个绿宝石。"));
+                        Component.translatable("message.eightwastelands.lou_zhen.need_emerald"));
                 event.setCancellationResult(InteractionResult.FAIL);
                 return;
             }
 
             if (player.experienceLevel < LOU_ZHEN_REPAIR_LEVEL_COST) {
                 player.sendOverlayMessage(
-                        Component.literal("楼砧：修复仙器需要 " + LOU_ZHEN_REPAIR_LEVEL_COST + " 级经验。"));
+                        Component.translatable("message.eightwastelands.lou_zhen.need_levels", LOU_ZHEN_REPAIR_LEVEL_COST));
                 event.setCancellationResult(InteractionResult.FAIL);
                 return;
             }
@@ -159,11 +153,11 @@ public class ModEvents {
         );
 
         player.sendOverlayMessage(
-                Component.literal("楼砧：仙器灵纹已修复。"));
+                Component.translatable("message.eightwastelands.lou_zhen.repaired"));
 
         event.setCancellationResult(InteractionResult.SUCCESS);
     }
-    //楼砧绿宝石检测
+    
     private boolean hasEmerald(Player player) {
 
         for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++) {
@@ -192,7 +186,7 @@ public class ModEvents {
         }
     }
 
-    //下面是死亡时九重天罚不掉落事件
+    
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
 
@@ -215,7 +209,7 @@ public class ModEvents {
         }
 
     }
-    //遗忘鬼
+    
     private ItemStack getForgetfulnessEquippedStack(Player player) {
 
         final ItemStack[] found = {ItemStack.EMPTY};
@@ -239,7 +233,7 @@ public class ModEvents {
 
         return found[0];
     }
-    //遗忘鬼记录伤害
+    
     private void recordForgetfulnessDamage(Pre event) {
 
         if (!(event.getEntity() instanceof Player player)) {
@@ -286,7 +280,7 @@ public class ModEvents {
                 player.level().getGameTime() + ForgetfulnessItem.DAMAGE_RESTORE_DELAY
         );
     }
-    //遗忘鬼处理遗忘
+    
     private void tickForgetfulness(Player player) {
 
         ItemStack forgetfulness = getForgetfulnessEquippedStack(player);
@@ -344,7 +338,7 @@ public class ModEvents {
         );
 
         player.sendOverlayMessage(
-                Component.literal("遗忘：你忘记了刚才的伤痛。"));
+                Component.translatable("message.eightwastelands.forgetfulness.damage_forgotten"));
     }
     private void tickForgetfulnessBuffMemory(Player player, ItemStack forgetfulness) {
 
@@ -450,7 +444,7 @@ public class ModEvents {
         data.remove(ForgetfulnessItem.FORGOTTEN_HEALTH_BEFORE_DAMAGE);
         data.remove(ForgetfulnessItem.BUFF_MEMORY);
     }
-    //重新计算天劫的雷次数
+    
     private void resetHeavenlyThunderSealCountOnDeath(Player player) {
 
         if (NineHeavensPunishmentItem.isHeavenlyTribulationReversed(player)) {
@@ -461,7 +455,7 @@ public class ModEvents {
 
         data.remove(HeavenlyThunderSealItem.HEAVENLY_THUNDER_COUNT);
     }
-    //玩家重生事件
+    
     @SubscribeEvent
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
 
@@ -491,7 +485,7 @@ public class ModEvents {
             }
         }
     }
-    //检测是否已经有天罚
+    
     private boolean hasNineHeavensPunishment(Player player) {
 
         if (player.getInventory().contains(new ItemStack(ModItems.NINE_HEAVENS_PUNISHMENT.get()))) {
@@ -516,9 +510,9 @@ public class ModEvents {
 
         return found[0];
     }
-    //修复死亡后消失
-    // 修复死亡后数据丢失
-    // 修复死亡后数据丢失
+    
+    
+    
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
 
@@ -556,7 +550,6 @@ public class ModEvents {
                     oldData.getIntOr(BloodSkullItem.VILLAGER_KILL_COUNT, 0)
             );
         }
-
 
 
         if (oldData.contains(HeavenlyThunderSealItem.NEXT_THUNDER_STRIKE_TIME)) {
@@ -628,7 +621,7 @@ public class ModEvents {
 
         return found[0];
     }
-    //反转因果
+    
     @SubscribeEvent
     public void onVillagerKilledByBloodSkull(LivingDeathEvent event) {
 
@@ -660,7 +653,7 @@ public class ModEvents {
         data.putInt(BloodSkullItem.VILLAGER_KILL_COUNT, newCount);
 
         player.sendOverlayMessage(
-                Component.literal("血颅骨：" + newCount + " / " + BloodSkullItem.REQUIRED_VILLAGER_KILLS));
+                Component.translatable("message.eightwastelands.blood_skull.progress", newCount, BloodSkullItem.REQUIRED_VILLAGER_KILLS));
 
         if (newCount < BloodSkullItem.REQUIRED_VILLAGER_KILLS) {
             return;
@@ -674,9 +667,9 @@ public class ModEvents {
         player.removeEffect(ModMobEffects.KARMA);
 
         player.sendOverlayMessage(
-                Component.literal("因果已反转：血债已满，因果归寂。"));
+                Component.translatable("message.eightwastelands.karma.reversed"));
     }
-    //检测血颅骨佩戴
+    
     private boolean hasBloodSkullEquipped(Player player) {
 
         final boolean[] found = {false};
@@ -700,9 +693,7 @@ public class ModEvents {
     }
 
 
-
-
-    //下面是开局给予功能
+    
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 
@@ -759,9 +750,9 @@ public class ModEvents {
 
         return equipped[0];
     }
-    //上面写的是开局给予功能
+    
 
-    //这个是防止玩家丢弃功能
+    
     @SubscribeEvent
     public void onItemToss(ItemTossEvent event) {
 
@@ -853,7 +844,7 @@ public class ModEvents {
         recordForgetfulnessDamage(event);
         clearFengxingBootsOnDamage(event);
     }
-    //避火珠
+    
     private void applyBihuoPearl(Pre event) {
 
         if (!(event.getEntity() instanceof Player player)) {
@@ -890,7 +881,7 @@ public class ModEvents {
 
             if (ArtifactDurabilityHelper.isBroken(pearl)) {
                 player.sendOverlayMessage(
-                        Component.literal("避火珠：珠光黯淡，避火之力已尽。"));
+                        Component.translatable("message.eightwastelands.bihuo_pearl.broken"));
             }
 
             return;
@@ -926,7 +917,7 @@ public class ModEvents {
         return found[0];
     }
 
-    //风行鞋
+    
     private void tickFengxingBoots(Player player) {
 
         if (player.level().isClientSide()) {
@@ -976,7 +967,7 @@ public class ModEvents {
                 clearFengxingBoots(player);
 
                 player.sendOverlayMessage(
-                        Component.literal("风行履：灵纹耗尽，风息已止。"));
+                        Component.translatable("message.eightwastelands.fengxing_boots.broken"));
             }
         }
     }
@@ -1087,7 +1078,7 @@ public class ModEvents {
 
         clearFengxingBoots(player);
     }
-    //劫灰戒
+    
     private void applyJiehuiRingLifeSave(Pre event) {
 
         if (!(event.getEntity() instanceof Player player)) {
@@ -1169,7 +1160,7 @@ public class ModEvents {
         JiehuiRingItem.startCooldown(player);
 
         player.sendOverlayMessage(
-                Component.literal("劫灰戒：灰烬护命，留你一息。"));
+                Component.translatable("message.eightwastelands.jiehui_ring.saved"));
     }
     private ItemStack getJiehuiRingEquippedStack(Player player) {
 
@@ -1196,8 +1187,7 @@ public class ModEvents {
     }
 
 
-
-    //夏扇实现
+    
     private void applySummerFanShield(Pre event) {
 
         if (!(event.getEntity() instanceof Player player)) {
@@ -1213,9 +1203,9 @@ public class ModEvents {
         SummerFanItem.consumeDamageShield(player);
 
         player.sendOverlayMessage(
-                Component.literal("夏扇护体：本次伤害已被化解。"));
+                Component.translatable("message.eightwastelands.summer_fan.damage_blocked"));
     }
-    //春剪实现
+    
     private void applySpringShearsFateCut(Pre event) {
 
         if (!(event.getSource().getEntity() instanceof Player player)) {
@@ -1287,14 +1277,11 @@ public class ModEvents {
         SpringShearsItem.startFateCutCooldown(player);
 
         player.sendOverlayMessage(
-                Component.literal("春剪裁命：已剪去其半数天命。"));
+                Component.translatable("message.eightwastelands.spring_shears.fate_cut"));
     }
 
 
-
-
-
-    //检测春剪是否佩戴
+    
     private boolean hasSpringShearsEquipped(Player player) {
 
         final boolean[] found = {false};
@@ -1316,7 +1303,7 @@ public class ModEvents {
 
         return found[0];
     }
-    //心魔板块
+    
     @SubscribeEvent
     public void onWitherKilledByHeartDemonMask(LivingDeathEvent event) {
 
@@ -1348,7 +1335,7 @@ public class ModEvents {
         player.removeEffect(ModMobEffects.HEART_DEMON);
 
         player.sendOverlayMessage(
-                Component.literal("心魔已反转：魔由心生，亦由心灭。"));
+                Component.translatable("message.eightwastelands.heart_demon.reversed"));
     }
     private boolean hasHeartDemonMaskEquipped(Player player) {
 
@@ -1371,7 +1358,7 @@ public class ModEvents {
 
         return found[0];
     }
-    // 心魔面具：受到攻击时，让攻击者反胃
+    
     private void applyHeartDemonMaskBacklash(Pre event) {
 
         if (!(event.getEntity() instanceof Player player)) {
@@ -1405,9 +1392,8 @@ public class ModEvents {
     }
 
 
-
-    //=============================================================================
-    //tick
+    
+    
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent.Post event) {
 
@@ -1432,7 +1418,7 @@ public class ModEvents {
 
         ensureNineHeavensPunishment(player);
     }
-    //鬼器修复
+    
     private void tickGhostArtifactAutoRepair(Player player) {
 
         if (player.level().getGameTime() % IGhostArtifactItem.GHOST_REPAIR_INTERVAL != 0) {
@@ -1497,7 +1483,7 @@ public class ModEvents {
                 IGhostArtifactItem.GHOST_REPAIR_AMOUNT
         );
     }
-    //天雷效果
+    
     private void applyHeavenlyThunderSeal(Pre event) {
 
         if (!(event.getEntity() instanceof Player player)) {
@@ -1541,8 +1527,7 @@ public class ModEvents {
         data.putInt(HeavenlyThunderSealItem.HEAVENLY_THUNDER_COUNT, newCount);
 
         player.sendOverlayMessage(
-                Component.literal("天雷印：" + newCount + " / "
-                        + HeavenlyThunderSealItem.REQUIRED_THUNDER_COUNT));
+                Component.translatable("message.eightwastelands.heavenly_thunder_seal.progress", newCount, HeavenlyThunderSealItem.REQUIRED_THUNDER_COUNT));
 
         if (newCount < HeavenlyThunderSealItem.REQUIRED_THUNDER_COUNT) {
             return;
@@ -1556,7 +1541,7 @@ public class ModEvents {
         player.removeEffect(ModMobEffects.HEAVENLY_TRIBULATION);
 
         player.sendOverlayMessage(
-                Component.literal("天劫已反转：九雷归印，天罚已寂。"));
+                Component.translatable("message.eightwastelands.heavenly_tribulation.reversed"));
     }
     private void tickHeavenlyThunderSealStrike(Player player) {
 
@@ -1661,7 +1646,7 @@ public class ModEvents {
 
         return found[0];
     }
-    //生桩效果
+    
     private void tickShengZhuangKnockbackResistance(Player player) {
 
         if (hasShengZhuangEquipped(player)) {
@@ -1711,7 +1696,7 @@ public class ModEvents {
         }
     }
 
-    //反转地灾
+    
     private void tryReverseEarthDisaster(Player player) {
 
         if (NineHeavensPunishmentItem.isEarthDisasterReversed(player)) {
@@ -1738,7 +1723,7 @@ public class ModEvents {
         player.removeEffect(ModMobEffects.EARTH_DISASTER);
 
         player.sendOverlayMessage(
-                Component.literal("地灾已反转：立桩镇地，地缚已断。"));
+                Component.translatable("message.eightwastelands.earth_disaster.reversed"));
     }
 
     private boolean hasShengZhuangEquipped(Player player) {
@@ -1762,7 +1747,7 @@ public class ModEvents {
 
         return found[0];
     }
-    //反转枯血
+    
     private void tryReverseWitheredBlood(Player player) {
 
         if (NineHeavensPunishmentItem.isWitheredBloodReversed(player)) {
@@ -1781,7 +1766,7 @@ public class ModEvents {
         player.removeEffect(ModMobEffects.WITHERED_BLOOD);
 
         player.sendOverlayMessage(
-                Component.literal("枯血已反转：气血充盈，生机复苏。"));
+                Component.translatable("message.eightwastelands.withered_blood.reversed"));
     }
 
     private void applySpiritExhaustion(Pre event) {
@@ -1794,7 +1779,7 @@ public class ModEvents {
             return;
         }
 
-        event.setNewDamage(event.getNewDamage() * 0.6F);    //玩家造成伤害降低至40%
+        event.setNewDamage(event.getNewDamage() * 0.6F);    
     }
     private void applyHeartDemon(Pre event) {
 
@@ -1908,7 +1893,7 @@ public class ModEvents {
         long lastEatTime = data.getLongOr(NineHeavensPunishmentItem.GOLDEN_APPLE_REGEN_BLOCK_TIME, 0L);
         long currentTime = player.level().getGameTime();
 
-        // 30秒内阻止金苹果/附魔金苹果带来的生命恢复
+        
         return currentTime - lastEatTime <= 30 * 20;
     }
     private boolean isNaturalFoodHealing(Player player, float healAmount) {
@@ -1938,7 +1923,7 @@ public class ModEvents {
             armorToughness.removeModifier(NineHeavensPunishmentItem.WIND_EVIL_ARMOR_TOUGHNESS_MODIFIER_ID);
         }
     }
-    // 夺运
+    
     @SubscribeEvent
     public void onLivingDrops(LivingDropsEvent event) {
 

@@ -1,7 +1,9 @@
 package com.px8042.eightwastelands;
 import com.px8042.eightwastelands.block.ModBlocks;
+import com.px8042.eightwastelands.event.FabaoBagEvents;
 import com.px8042.eightwastelands.event.ModEvents;
 import com.px8042.eightwastelands.item.ModItems;
+import com.px8042.eightwastelands.menu.ModMenuTypes;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,45 +20,42 @@ import com.px8042.eightwastelands.item.ModCreativeModeTabs;
 import com.px8042.eightwastelands.effect.ModMobEffects;
 
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(EightWastelands.MODID)
 public class EightWastelands {
-    // Define mod id in a common place for everything to reference
+    
     public static final String MODID = "eightwastelands";
-    // Directly reference a slf4j logger
+    
     public static final Logger LOGGER = LogUtils.getLogger();
 
 
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
-    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
+    
+    
     public EightWastelands(IEventBus modEventBus, ModContainer modContainer) {
-        // Register the commonSetup method for modloading
+        
         ModBlocks.register(modEventBus);
         ModItems.register(modEventBus);
         ModMobEffects.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
 
-
-
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (eightwastelands) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
+        
+        
+        
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new ModEvents());
+        NeoForge.EVENT_BUS.register(new FabaoBagEvents());
 
 
-
-
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
+        
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        // Some common setup code
+        
         LOGGER.info("HELLO FROM COMMON SETUP");
 
         if (Config.LOG_DIRT_BLOCK.getAsBoolean()) {
@@ -69,12 +68,10 @@ public class EightWastelands {
     }
 
 
-
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
+        
         LOGGER.info("HELLO from server starting");
     }
 }

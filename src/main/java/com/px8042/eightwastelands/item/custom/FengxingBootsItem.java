@@ -43,7 +43,6 @@ public class FengxingBootsItem extends AbstractHeavenlyArtifactItem {
     }
 
 
-
     @Override
     public void appendHoverText(
             ItemStack stack,
@@ -54,7 +53,7 @@ public class FengxingBootsItem extends AbstractHeavenlyArtifactItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 仙器 · 风行履 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.fengxing_boots.title")
                 .withStyle(style -> style.withColor(0xA7F3FF).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

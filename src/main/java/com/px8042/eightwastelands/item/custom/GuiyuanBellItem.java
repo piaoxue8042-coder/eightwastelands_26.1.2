@@ -74,7 +74,7 @@ public class GuiyuanBellItem extends Item implements ICurioItem {
         );
 
         player.sendOverlayMessage(
-                Component.literal("绝灵已反转：一铃归元，灵机复苏。"));
+                Component.translatable("message.eightwastelands.spirit_exhaustion.reversed"));
     }
 
     private void tickDispelNegativeEffect(Player player) {
@@ -100,7 +100,7 @@ public class GuiyuanBellItem extends Item implements ICurioItem {
         );
 
         player.sendOverlayMessage(
-                Component.literal("归元铃：已驱散一个负面效果。"));
+                Component.translatable("message.eightwastelands.guiyuan_bell.cleansed"));
     }
 
     private Holder<MobEffect> findDispellableNegativeEffect(Player player) {
@@ -148,7 +148,7 @@ public class GuiyuanBellItem extends Item implements ICurioItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 一铃归元 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.guiyuan_bell.title")
                 .withStyle(style -> style.withColor(0x66FFAA).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

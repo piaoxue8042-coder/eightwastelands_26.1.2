@@ -42,7 +42,7 @@ public class HeartDemonMaskItem extends Item implements ICurioItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 心魔照影 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.heart_demon_mask.title")
                 .withStyle(style -> style.withColor(0xC71585).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

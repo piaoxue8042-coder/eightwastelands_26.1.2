@@ -23,11 +23,6 @@ public class ShengZhuangItem extends Item implements ICurioItem {
     public static final double KNOCKBACK_RESISTANCE_BONUS = 1.0D;
 
 
-
-
-
-
-
     public ShengZhuangItem(Properties properties) {
         super(properties);
     }
@@ -57,7 +52,7 @@ public class ShengZhuangItem extends Item implements ICurioItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 以身镇地 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.sheng_zhuang.title")
                 .withStyle(style -> style.withColor(0x8B0000).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

@@ -51,7 +51,7 @@ public class ForgetfulnessItem extends AbstractGhostArtifactItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 鬼器 · 遗忘 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.forgetfulness.title")
                 .withStyle(style -> style.withColor(0xB388FF).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

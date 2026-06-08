@@ -33,7 +33,6 @@ public class JiehuiRingItem extends AbstractHeavenlyArtifactItem {
     }
 
 
-
     public static boolean isReady(Player player) {
         long cooldownEndTime = player.getPersistentData().getLongOr(COOLDOWN_END_TIME, 0L);
         return player.level().getGameTime() >= cooldownEndTime;
@@ -56,7 +55,7 @@ public class JiehuiRingItem extends AbstractHeavenlyArtifactItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 仙器 · 劫灰戒 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.jiehui_ring.title")
                 .withStyle(style -> style.withColor(0xFFD27F).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

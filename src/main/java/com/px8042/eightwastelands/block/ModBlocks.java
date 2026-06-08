@@ -28,7 +28,7 @@ public class ModBlocks {
         return properties.setId(blockKey(name));
     }
 
-    // 楼砧：铁砧强化版，不会损坏，可用于修复仙器
+    
     public static final DeferredBlock<Block> LOU_ZHEN =
             BLOCKS.register("lou_zhen",
                     () -> new LouZhenBlock(

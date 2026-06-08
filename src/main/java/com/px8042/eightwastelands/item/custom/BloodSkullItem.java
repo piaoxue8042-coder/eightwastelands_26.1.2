@@ -47,7 +47,7 @@ public class BloodSkullItem extends Item implements ICurioItem {
     ) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
-        tooltipComponents.accept(Component.literal("✦ 血债因果 ✦")
+        tooltipComponents.accept(Component.translatable("tooltip.eightwastelands.blood_skull.title")
                 .withStyle(style -> style.withColor(0x8B0000).withBold(true)));
 
         tooltipComponents.accept(Component.translatable(

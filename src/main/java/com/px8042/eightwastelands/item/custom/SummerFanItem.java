@@ -15,7 +15,6 @@ import net.minecraft.ChatFormatting;
 import java.util.List;
 
 
-
 public class SummerFanItem extends Item implements ICurioItem {
 
     public static final String SUMMER_FAN_DAMAGE_SHIELD_READY =
@@ -74,7 +73,7 @@ public class SummerFanItem extends Item implements ICurioItem {
             );
 
             player.sendOverlayMessage(
-                    Component.literal("风煞已反转：罡风化作护体清风。"));
+                    Component.translatable("message.eightwastelands.wind_evil.reversed"));
         }
     }
 
@@ -98,7 +97,7 @@ public class SummerFanItem extends Item implements ICurioItem {
         );
 
         player.sendOverlayMessage(
-                Component.literal("夏扇护体：已可抵御下一次伤害。"));
+                Component.translatable("message.eightwastelands.summer_fan.shield_ready"));
     }
 
     public static void consumeDamageShield(Player player) {
