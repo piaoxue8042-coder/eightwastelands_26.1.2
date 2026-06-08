@@ -1,5 +1,6 @@
 {
   "size": 3,
   "operation": "SET",
-  "order": 200
+  "order": 200,
+  "icon": "eightwastelands:slot/xianqi"
 }
