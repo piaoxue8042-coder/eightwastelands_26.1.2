@@ -18,6 +18,12 @@
   "effect.eightwastelands.spring_shears_fate_cut": "春剪裁命",
   "effect.eightwastelands.flame_ban": "炎禁",
   "effect.eightwastelands.cold_accumulation": "寒积",
+  "effect.eightwastelands.bleeding": "流血",
+  "effect.eightwastelands.toxic_erosion": "蚀毒",
+  "effect.eightwastelands.armor_break": "破甲",
+  "effect.eightwastelands.weakness_mark": "虚弱",
+  "effect.eightwastelands.slowdown": "减速",
+  "effect.eightwastelands.rooted": "定身",
 
   "block.eightwastelands.lou_zhen": "楼砧",
 
@@ -37,6 +43,9 @@
   "item.eightwastelands.fabao_bag": "法宝袋",
   "item.eightwastelands.ironcold_blade": "铁寒锋",
   "item.eightwastelands.huoyun_sword": "霍允",
+  "item.eightwastelands.fucksky_sword": "开天",
+  "item.eightwastelands.blood_drinking_blade": "汲血刃",
+  "item.eightwastelands.fuckmountain_axe": "造化劈山斧",
   "item.eightwastelands.test_fabao": "测试法宝",
   "item.eightwastelands.test_quick_blade": "测试快刀",
   "item.eightwastelands.test_spear_shadow": "测试枪影",
@@ -129,6 +138,9 @@
   "tooltip.eightwastelands.ironcold_blade.description_1": "风冷的时候，人会更清醒。",
   "tooltip.eightwastelands.ironcold_blade.description_2": "很多话就不必说了，很多选择也会变得很简单。",
   "tooltip.eightwastelands.huoyun_sword.description": "一把被遗忘的剑，剑上刻着一个“霍”字。",
+  "tooltip.eightwastelands.fucksky_sword.description": "来自鹤归云镜的修士曾用过的法宝。",
+  "tooltip.eightwastelands.blood_drinking_blade.description": "千万不要用手碰这把刀的刀刃。",
+  "tooltip.eightwastelands.fuckmountain_axe.description": "曾经一位少年手持它劈开大山，救出了自己的母亲。",
   "tooltip.eightwastelands.test_fabao.description": "第一版自动攻击测试用法宝。",
 
   "tooltip.eightwastelands.nine_heavens_punishment.title": "九劫齐降",

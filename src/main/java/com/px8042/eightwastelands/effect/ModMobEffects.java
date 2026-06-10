@@ -57,6 +57,30 @@ public class ModMobEffects {
             MOB_EFFECTS.register("cold_accumulation",
                     () -> new ColdAccumulationEffect(MobEffectCategory.HARMFUL, 0x66D9FF));
 
+    public static final DeferredHolder<MobEffect, MobEffect> BLEEDING =
+            MOB_EFFECTS.register("bleeding",
+                    () -> new BleedingEffect(MobEffectCategory.HARMFUL, 0x8B0000));
+
+    public static final DeferredHolder<MobEffect, MobEffect> TOXIC_EROSION =
+            MOB_EFFECTS.register("toxic_erosion",
+                    () -> new ToxicErosionEffect(MobEffectCategory.HARMFUL, 0x4FA83D));
+
+    public static final DeferredHolder<MobEffect, MobEffect> ARMOR_BREAK =
+            MOB_EFFECTS.register("armor_break",
+                    () -> new ArmorBreakEffect(MobEffectCategory.HARMFUL, 0xB87333));
+
+    public static final DeferredHolder<MobEffect, MobEffect> WEAKNESS_MARK =
+            MOB_EFFECTS.register("weakness_mark",
+                    () -> new WeaknessMarkEffect(MobEffectCategory.HARMFUL, 0x6A5ACD));
+
+    public static final DeferredHolder<MobEffect, MobEffect> SLOWDOWN =
+            MOB_EFFECTS.register("slowdown",
+                    () -> new SlowdownEffect(MobEffectCategory.HARMFUL, 0x7FB3D5));
+
+    public static final DeferredHolder<MobEffect, MobEffect> ROOTED =
+            MOB_EFFECTS.register("rooted",
+                    () -> new RootedEffect(MobEffectCategory.HARMFUL, 0x556B2F));
+
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);
     }

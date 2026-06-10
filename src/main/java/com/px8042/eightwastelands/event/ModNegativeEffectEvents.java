@@ -2,6 +2,7 @@ package com.px8042.eightwastelands.event;
 
 import com.px8042.eightwastelands.effect.ModMobEffects;
 import com.px8042.eightwastelands.effect.ModNegativeEffectHelper;
+import com.px8042.eightwastelands.effect.BleedingEffect;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -59,7 +60,16 @@ public class ModNegativeEffectEvents {
     @SubscribeEvent
     public void onMobEffectExpired(MobEffectEvent.Expired event) {
         MobEffectInstance effectInstance = event.getEffectInstance();
-        if (effectInstance == null || effectInstance.getEffect().value() != ModMobEffects.COLD_ACCUMULATION.get()) {
+        if (effectInstance == null) {
+            return;
+        }
+
+        if (effectInstance.getEffect().value() == ModMobEffects.BLEEDING.get()) {
+            BleedingEffect.clearData(event.getEntity());
+            return;
+        }
+
+        if (effectInstance.getEffect().value() != ModMobEffects.COLD_ACCUMULATION.get()) {
             return;
         }
 
@@ -76,6 +86,9 @@ public class ModNegativeEffectEvents {
     public void onMobEffectRemoved(MobEffectEvent.Remove event) {
         if (event.getEffect().value() == ModMobEffects.COLD_ACCUMULATION.get()) {
             clearColdAccumulationData(event.getEntity());
+        }
+        if (event.getEffect().value() == ModMobEffects.BLEEDING.get()) {
+            BleedingEffect.clearData(event.getEntity());
         }
     }
 

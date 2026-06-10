@@ -25,4 +25,13 @@ public class ModDamageTypes {
                             "heavenly_thunder_seal_lightning"
                     )
             );
+
+    public static final ResourceKey<DamageType> FABAO_ARMOR_PIERCING =
+            ResourceKey.create(
+                    Registries.DAMAGE_TYPE,
+                    Identifier.fromNamespaceAndPath(
+                            EightWastelands.MODID,
+                            "fabao_armor_piercing"
+                    )
+            );
 }

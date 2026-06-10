@@ -153,6 +153,30 @@ public class ModItems {
                                     .enchantable(15)
                     ));
 
+    public static final DeferredItem<Item> KAITIAN_SWORD =
+            ITEMS.register("fucksky_sword",
+                    () -> new KaitianSwordItem(
+                            itemProperties("fucksky_sword")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
+    public static final DeferredItem<Item> BLOOD_DRINKING_BLADE =
+            ITEMS.register("blood_drinking_blade",
+                    () -> new BloodDrinkingBladeItem(
+                            itemProperties("blood_drinking_blade")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
+    public static final DeferredItem<Item> ZAOHUA_PISHAN_AXE =
+            ITEMS.register("fuckmountain_axe",
+                    () -> new ZaohuaPishanAxeItem(
+                            itemProperties("fuckmountain_axe")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
     public static final DeferredItem<Item> TEST_FABAO =
             ITEMS.register("test_fabao",
                     () -> new TestFabaoItem(

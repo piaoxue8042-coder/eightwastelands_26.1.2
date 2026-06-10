@@ -38,6 +38,9 @@ public class ModCreativeModeTabs {
                                 output.accept(ModItems.FABAO_BAG.get());
                                 output.accept(ModItems.IRONCOLD_BLADE.get());
                                 output.accept(ModItems.HUOYUN_SWORD.get());
+                                output.accept(ModItems.KAITIAN_SWORD.get());
+                                output.accept(ModItems.BLOOD_DRINKING_BLADE.get());
+                                output.accept(ModItems.ZAOHUA_PISHAN_AXE.get());
                                 output.accept(ModItems.TEST_FABAO.get());
                                 output.accept(ModItems.TEST_QUICK_BLADE.get());
                                 output.accept(ModItems.TEST_SPEAR_SHADOW.get());
