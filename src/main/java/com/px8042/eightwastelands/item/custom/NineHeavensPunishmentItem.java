@@ -141,6 +141,13 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
     }
     @Override
     public boolean canUnequip(SlotContext slotContext, ItemStack stack) {
+        return true;
+    }
+
+
+    /*
+    @Override
+    public boolean canUnequip(SlotContext slotContext, ItemStack stack) {
 
         if (!(slotContext.entity() instanceof Player player)) {
             return false;
@@ -148,6 +155,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
 
         return player.isCreative() || player.isSpectator();
     }
+    */
     
     private void applyTribulationMobEffects(Player player) {
 
