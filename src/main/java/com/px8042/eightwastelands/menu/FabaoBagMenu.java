@@ -13,6 +13,12 @@ import net.minecraft.world.item.ItemStack;
 public class FabaoBagMenu extends AbstractContainerMenu {
 
     private static final int BAG_SLOT_COUNT = FabaoBagItem.SLOT_COUNT;
+    private static final int BAG_GRID_COLUMNS = 3;
+    private static final int BAG_SLOT_START_X = 61;
+    private static final int BAG_SLOT_START_Y = 18;
+    private static final int SLOT_SPACING = 18;
+    private static final int PLAYER_INVENTORY_X = 8;
+    private static final int PLAYER_INVENTORY_Y = 84;
     private static final int PLAYER_INVENTORY_SLOT_COUNT = 36;
     private static final int PLAYER_INVENTORY_START = BAG_SLOT_COUNT;
     private static final int PLAYER_INVENTORY_END = PLAYER_INVENTORY_START + PLAYER_INVENTORY_SLOT_COUNT;
@@ -37,7 +43,11 @@ public class FabaoBagMenu extends AbstractContainerMenu {
         bagContainer.startOpen(playerInventory.player);
 
         for (int slot = 0; slot < BAG_SLOT_COUNT; slot++) {
-            this.addSlot(new Slot(bagContainer, slot, 35 + slot * 18, 18) {
+            int column = slot % BAG_GRID_COLUMNS;
+            int row = slot / BAG_GRID_COLUMNS;
+            int x = BAG_SLOT_START_X + column * SLOT_SPACING;
+            int y = BAG_SLOT_START_Y + row * SLOT_SPACING;
+            this.addSlot(new Slot(bagContainer, slot, x, y) {
                 @Override
                 public boolean mayPlace(ItemStack stack) {
                     return FabaoBagItem.isValidFabaoStack(stack);
@@ -50,7 +60,7 @@ public class FabaoBagMenu extends AbstractContainerMenu {
             });
         }
 
-        this.addStandardInventorySlots(playerInventory, 8, 50);
+        this.addStandardInventorySlots(playerInventory, PLAYER_INVENTORY_X, PLAYER_INVENTORY_Y);
     }
 
     @Override

@@ -1,4 +1,6 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    "eightwastelands:test_spinning_axe"
+  ]
 }

@@ -49,6 +49,14 @@ public class ModMobEffects {
             MOB_EFFECTS.register("life_exhaustion",
                     () -> new ModMobEffect(MobEffectCategory.HARMFUL, 0xC0C0C0));
 
+    public static final DeferredHolder<MobEffect, MobEffect> FLAME_BAN =
+            MOB_EFFECTS.register("flame_ban",
+                    () -> new ModMobEffect(MobEffectCategory.HARMFUL, 0xFF5A1F));
+
+    public static final DeferredHolder<MobEffect, MobEffect> COLD_ACCUMULATION =
+            MOB_EFFECTS.register("cold_accumulation",
+                    () -> new ColdAccumulationEffect(MobEffectCategory.HARMFUL, 0x66D9FF));
+
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);
     }

@@ -16,6 +16,8 @@
   "effect.eightwastelands.wind_evil": "风煞",
   "effect.eightwastelands.withered_blood": "枯血",
   "effect.eightwastelands.spring_shears_fate_cut": "春剪裁命",
+  "effect.eightwastelands.flame_ban": "炎禁",
+  "effect.eightwastelands.cold_accumulation": "寒积",
 
   "block.eightwastelands.lou_zhen": "楼砧",
 
@@ -33,7 +35,14 @@
   "item.eightwastelands.fengxing_boots": "风行屐",
   "item.eightwastelands.bihuo_pearl": "避火珠",
   "item.eightwastelands.fabao_bag": "法宝袋",
+  "item.eightwastelands.ironcold_blade": "铁寒锋",
+  "item.eightwastelands.huoyun_sword": "霍允",
   "item.eightwastelands.test_fabao": "测试法宝",
+  "item.eightwastelands.test_quick_blade": "测试快刀",
+  "item.eightwastelands.test_spear_shadow": "测试枪影",
+  "item.eightwastelands.test_spinning_axe": "测试旋斧",
+  "item.eightwastelands.test_flame_ban_needle": "测试炎禁针",
+  "item.eightwastelands.test_cold_accumulation_needle": "测试寒积针",
 
   "container.eightwastelands.fabao_bag": "法宝袋",
 
@@ -116,8 +125,11 @@
 
   "tooltip.eightwastelands.fabao_bag.description": "收纳法宝，并自动御使攻击附近敌人。",
   "tooltip.eightwastelands.fabao_bag.slots": "已收纳法宝：%s/%s",
+  "tooltip.eightwastelands.fabao.stats": "伤害：%s，攻击次数：%s，冷却：%s 秒",
+  "tooltip.eightwastelands.ironcold_blade.description_1": "风冷的时候，人会更清醒。",
+  "tooltip.eightwastelands.ironcold_blade.description_2": "很多话就不必说了，很多选择也会变得很简单。",
+  "tooltip.eightwastelands.huoyun_sword.description": "一把被遗忘的剑，剑上刻着一个“霍”字。",
   "tooltip.eightwastelands.test_fabao.description": "第一版自动攻击测试用法宝。",
-  "tooltip.eightwastelands.test_fabao.stats": "伤害：%s，冷却：%s 秒",
 
   "tooltip.eightwastelands.nine_heavens_punishment.title": "九劫齐降",
   "tooltip.eightwastelands.nine_heavens_punishment.flavor": "滴答……血色的纹路在物品上蔓延。",

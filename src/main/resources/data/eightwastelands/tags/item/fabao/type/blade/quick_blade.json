@@ -1,4 +1,7 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    "eightwastelands:ironcold_blade",
+    "eightwastelands:test_quick_blade"
+  ]
 }

@@ -2,6 +2,7 @@ package com.px8042.eightwastelands;
 import com.px8042.eightwastelands.block.ModBlocks;
 import com.px8042.eightwastelands.event.FabaoBagEvents;
 import com.px8042.eightwastelands.event.ModEvents;
+import com.px8042.eightwastelands.event.ModNegativeEffectEvents;
 import com.px8042.eightwastelands.item.ModItems;
 import com.px8042.eightwastelands.menu.ModMenuTypes;
 import org.slf4j.Logger;
@@ -47,6 +48,7 @@ public class EightWastelands {
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new ModEvents());
         NeoForge.EVENT_BUS.register(new FabaoBagEvents());
+        NeoForge.EVENT_BUS.register(new ModNegativeEffectEvents());
 
 
         

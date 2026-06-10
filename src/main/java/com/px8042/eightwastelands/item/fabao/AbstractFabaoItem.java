@@ -1,7 +1,14 @@
 package com.px8042.eightwastelands.item.fabao;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+
+import java.util.Locale;
+import java.util.function.Consumer;
 
 public abstract class AbstractFabaoItem extends Item implements IFabaoItem {
 
@@ -62,5 +69,31 @@ public abstract class AbstractFabaoItem extends Item implements IFabaoItem {
     @Override
     public int getMaxPierceTargets(ItemStack stack) {
         return this.maxPierceTargets;
+    }
+
+    @Override
+    public void appendHoverText(
+            ItemStack stack,
+            TooltipContext context,
+            TooltipDisplay tooltipDisplay,
+            Consumer<Component> tooltipComponents,
+            TooltipFlag tooltipFlag
+    ) {
+        super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
+
+        tooltipComponents.accept(Component.translatable(
+                "tooltip.eightwastelands.fabao.stats",
+                formatDecimal(this.getBaseDamage(stack)),
+                this.getAttackCount(stack),
+                formatDecimal(this.getCooldownTicks(stack) / 20.0D)
+        ).withStyle(ChatFormatting.GRAY));
+    }
+
+    private static String formatDecimal(double value) {
+        double rounded = Math.rint(value);
+        if (Math.abs(value - rounded) < 0.001D) {
+            return Integer.toString((int) rounded);
+        }
+        return String.format(Locale.ROOT, "%.1f", value);
     }
 }

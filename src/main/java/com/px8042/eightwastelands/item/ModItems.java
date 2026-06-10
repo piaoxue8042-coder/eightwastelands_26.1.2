@@ -4,7 +4,7 @@ import com.px8042.eightwastelands.EightWastelands;
 import com.px8042.eightwastelands.block.ModBlocks;
 import com.px8042.eightwastelands.item.custom.*;
 import com.px8042.eightwastelands.item.fabao.FabaoBagItem;
-import com.px8042.eightwastelands.item.fabao.TestFabaoItem;
+import com.px8042.eightwastelands.item.fabao.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -137,10 +137,66 @@ public class ModItems {
                             itemProperties("fabao_bag").stacksTo(1)
                     ));
 
+    public static final DeferredItem<Item> IRONCOLD_BLADE =
+            ITEMS.register("ironcold_blade",
+                    () -> new IroncoldBladeItem(
+                            itemProperties("ironcold_blade")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
+    public static final DeferredItem<Item> HUOYUN_SWORD =
+            ITEMS.register("huoyun_sword",
+                    () -> new HuoyunSwordItem(
+                            itemProperties("huoyun_sword")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
     public static final DeferredItem<Item> TEST_FABAO =
             ITEMS.register("test_fabao",
                     () -> new TestFabaoItem(
                             itemProperties("test_fabao")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
+    public static final DeferredItem<Item> TEST_QUICK_BLADE =
+            ITEMS.register("test_quick_blade",
+                    () -> new TestQuickBladeItem(
+                            itemProperties("test_quick_blade")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
+    public static final DeferredItem<Item> TEST_SPEAR_SHADOW =
+            ITEMS.register("test_spear_shadow",
+                    () -> new TestSpearShadowItem(
+                            itemProperties("test_spear_shadow")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
+    public static final DeferredItem<Item> TEST_SPINNING_AXE =
+            ITEMS.register("test_spinning_axe",
+                    () -> new TestSpinningAxeItem(
+                            itemProperties("test_spinning_axe")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
+    public static final DeferredItem<Item> TEST_FLAME_BAN_NEEDLE =
+            ITEMS.register("test_flame_ban_needle",
+                    () -> new TestFlameBanNeedleItem(
+                            itemProperties("test_flame_ban_needle")
+                                    .stacksTo(1)
+                                    .enchantable(15)
+                    ));
+
+    public static final DeferredItem<Item> TEST_COLD_ACCUMULATION_NEEDLE =
+            ITEMS.register("test_cold_accumulation_needle",
+                    () -> new TestColdAccumulationNeedleItem(
+                            itemProperties("test_cold_accumulation_needle")
                                     .stacksTo(1)
                                     .enchantable(15)
                     ));

@@ -7,10 +7,10 @@ import net.minecraft.world.item.component.TooltipDisplay;
 
 import java.util.function.Consumer;
 
-public class TestFabaoItem extends AbstractLongSwordFabaoItem {
+public class HuoyunSwordItem extends AbstractLongSwordFabaoItem {
 
-    public TestFabaoItem(Properties properties) {
-        super(properties, 6.0F, 16.0D);
+    public HuoyunSwordItem(Properties properties) {
+        super(properties, 10.0F, 10 * 20, 12.0D);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class TestFabaoItem extends AbstractLongSwordFabaoItem {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipComponents, tooltipFlag);
 
         tooltipComponents.accept(Component.translatable(
-                "tooltip.eightwastelands.test_fabao.description"
-        ).withStyle(style -> style.withColor(0x9AD6FF).withItalic(true)));
+                "tooltip.eightwastelands.huoyun_sword.description"
+        ).withStyle(style -> style.withColor(0xBFC9D8).withItalic(true)));
     }
 }

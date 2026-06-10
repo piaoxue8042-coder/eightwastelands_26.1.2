@@ -36,7 +36,14 @@ public class ModCreativeModeTabs {
                                 output.accept(ModItems.FENGXING_BOOTS.get());
                                 output.accept(ModItems.BIHUO_PEARL.get());
                                 output.accept(ModItems.FABAO_BAG.get());
+                                output.accept(ModItems.IRONCOLD_BLADE.get());
+                                output.accept(ModItems.HUOYUN_SWORD.get());
                                 output.accept(ModItems.TEST_FABAO.get());
+                                output.accept(ModItems.TEST_QUICK_BLADE.get());
+                                output.accept(ModItems.TEST_SPEAR_SHADOW.get());
+                                output.accept(ModItems.TEST_SPINNING_AXE.get());
+                                output.accept(ModItems.TEST_FLAME_BAN_NEEDLE.get());
+                                output.accept(ModItems.TEST_COLD_ACCUMULATION_NEEDLE.get());
 
                                 
                             })
