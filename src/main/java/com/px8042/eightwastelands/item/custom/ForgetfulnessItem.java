@@ -24,6 +24,9 @@ public class ForgetfulnessItem extends AbstractGhostArtifactItem {
     public static final String BUFF_MEMORY =
             "eightwastelands_forgetfulness_buff_memory";
 
+    public static final String BUFF_RENEW_AFTER_TIME =
+            "renew_after_time";
+
     public static final int DAMAGE_RESTORE_DELAY = 2 * 20;
 
     public static final int DAMAGE_MEMORY_DURABILITY_COST = 8;

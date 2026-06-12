@@ -139,6 +139,7 @@ public class NineHeavensPunishmentItem extends Item implements ICurioItem {
     public boolean canEquip(SlotContext slotContext, ItemStack stack) {
         return slotContext.identifier().equals("calamity");
     }
+
     @Override
     public boolean canUnequip(SlotContext slotContext, ItemStack stack) {
         return true;

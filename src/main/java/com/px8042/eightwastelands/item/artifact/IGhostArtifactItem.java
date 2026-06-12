@@ -8,7 +8,7 @@ public interface IGhostArtifactItem {
 
     int GHOST_REPAIR_INTERVAL = 20;
 
-    int GHOST_REPAIR_AMOUNT = 1;
+    int GHOST_REPAIR_AMOUNT = 10;
 
     int EXPERIENCE_COST_PER_REPAIR = 1;
 

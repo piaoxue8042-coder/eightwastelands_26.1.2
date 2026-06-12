@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:materials/fabao/cores",
+    "#eightwastelands:materials/fabao/metals",
+    "#eightwastelands:materials/fabao/sword",
+    "#eightwastelands:materials/fabao/formation"
+  ]
+}

@@ -16,6 +16,9 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<FabaoBagMenu>> FABAO_BAG =
             MENU_TYPES.register("fabao_bag", () -> IMenuTypeExtension.create(FabaoBagMenu::fromNetwork));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<WealthTableMenu>> WEALTH_TABLE =
+            MENU_TYPES.register("wealth_table", () -> IMenuTypeExtension.create(WealthTableMenu::fromNetwork));
+
     public static void register(IEventBus eventBus) {
         MENU_TYPES.register(eventBus);
     }

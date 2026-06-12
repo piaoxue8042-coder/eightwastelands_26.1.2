@@ -5,6 +5,7 @@ import com.px8042.eightwastelands.block.ModBlocks;
 import com.px8042.eightwastelands.item.custom.*;
 import com.px8042.eightwastelands.item.fabao.FabaoBagItem;
 import com.px8042.eightwastelands.item.fabao.*;
+import com.px8042.eightwastelands.item.material.ModMaterialItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -29,6 +30,10 @@ public class ModItems {
 
     private static Item.Properties itemProperties(String name) {
         return new Item.Properties().setId(itemKey(name));
+    }
+
+    private static DeferredItem<Item> registerMaterial(String name) {
+        return ITEMS.register(name, () -> new ModMaterialItem(itemProperties(name)));
     }
 
 
@@ -99,6 +104,30 @@ public class ModItems {
                                     .stacksTo(1)
                                     .durability(800)
                     ));
+
+    public static final DeferredItem<Item> SLEEPWALKING_GHOST =
+            ITEMS.register("sleepwalking_ghost",
+                    () -> new SleepwalkingGhostItem(
+                            itemProperties("sleepwalking_ghost")
+                                    .stacksTo(1)
+                                    .durability(800)
+                    ));
+
+    public static final DeferredItem<Item> GHOST_BLOOD =
+            ITEMS.register("ghost_blood",
+                    () -> new GhostBloodItem(
+                            itemProperties("ghost_blood")
+                                    .stacksTo(1)
+                                    .durability(800)
+                    ));
+
+    public static final DeferredItem<Item> GHOST_BRAIN =
+            ITEMS.register("ghost_brain",
+                    () -> new GhostBrainItem(
+                            itemProperties("ghost_brain")
+                                    .stacksTo(1)
+                                    .durability(800)
+                    ));
     
     public static final DeferredItem<Item> JIEHUI_RING =
             ITEMS.register("jiehui_ring",
@@ -113,6 +142,13 @@ public class ModItems {
                     () -> new BlockItem(
                             ModBlocks.LOU_ZHEN.get(),
                             itemProperties("lou_zhen").useBlockDescriptionPrefix()
+                    ));
+
+    public static final DeferredItem<Item> WEALTH_TABLE =
+            ITEMS.register("wealth_table",
+                    () -> new BlockItem(
+                            ModBlocks.WEALTH_TABLE.get(),
+                            itemProperties("wealth_table").useBlockDescriptionPrefix()
                     ));
     
     public static final DeferredItem<Item> FENGXING_BOOTS =
@@ -131,11 +167,29 @@ public class ModItems {
                                     .durability(400)
                     ));
 
+    public static final DeferredItem<Item> JADE_MARROW_PENDANT =
+            ITEMS.register("jade_marrow_pendant",
+                    () -> new JadeMarrowPendantItem(
+                            itemProperties("jade_marrow_pendant")
+                                    .stacksTo(1)
+                                    .durability(500)
+                    ));
+
     public static final DeferredItem<Item> FABAO_BAG =
             ITEMS.register("fabao_bag",
                     () -> new FabaoBagItem(
                             itemProperties("fabao_bag").stacksTo(1)
                     ));
+
+    public static final DeferredItem<Item> SPIRIT_CORE = registerMaterial("spirit_core");
+    public static final DeferredItem<Item> FORMATION_STONE = registerMaterial("formation_stone");
+    public static final DeferredItem<Item> SPIRIT_IRON_INGOT = registerMaterial("spirit_iron_ingot");
+    public static final DeferredItem<Item> COLD_IRON_INGOT = registerMaterial("cold_iron_ingot");
+    public static final DeferredItem<Item> DARK_STEEL_INGOT = registerMaterial("dark_steel_ingot");
+    public static final DeferredItem<Item> THUNDER_STEEL_INGOT = registerMaterial("thunder_steel_ingot");
+    public static final DeferredItem<Item> SWORD_BLANK = registerMaterial("sword_blank");
+    public static final DeferredItem<Item> SWORD_INTENT_SHARD = registerMaterial("sword_intent_shard");
+    public static final DeferredItem<Item> EDGE_TEMPERING_STONE = registerMaterial("edge_tempering_stone");
 
     public static final DeferredItem<Item> IRONCOLD_BLADE =
             ITEMS.register("ironcold_blade",

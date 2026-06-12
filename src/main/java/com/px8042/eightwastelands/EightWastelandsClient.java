@@ -1,6 +1,7 @@
 package com.px8042.eightwastelands;
 
 import com.px8042.eightwastelands.client.gui.FabaoBagScreen;
+import com.px8042.eightwastelands.client.gui.WealthTableScreen;
 import com.px8042.eightwastelands.menu.ModMenuTypes;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -35,5 +36,6 @@ public class EightWastelandsClient {
     @SubscribeEvent
     static void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.FABAO_BAG.get(), FabaoBagScreen::new);
+        event.register(ModMenuTypes.WEALTH_TABLE.get(), WealthTableScreen::new);
     }
 }

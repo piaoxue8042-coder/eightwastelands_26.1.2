@@ -2,6 +2,7 @@ package com.px8042.eightwastelands.block;
 
 import com.px8042.eightwastelands.EightWastelands;
 import com.px8042.eightwastelands.block.custom.LouZhenBlock;
+import com.px8042.eightwastelands.block.custom.WealthTableBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -33,6 +34,12 @@ public class ModBlocks {
             BLOCKS.register("lou_zhen",
                     () -> new LouZhenBlock(
                             blockProperties("lou_zhen", BlockBehaviour.Properties.ofFullCopy(Blocks.ANVIL))
+                    ));
+
+    public static final DeferredBlock<Block> WEALTH_TABLE =
+            BLOCKS.register("wealth_table",
+                    () -> new WealthTableBlock(
+                            blockProperties("wealth_table", BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE))
                     ));
 
     public static void register(IEventBus eventBus) {

@@ -5,6 +5,7 @@ import com.px8042.eightwastelands.event.ModEvents;
 import com.px8042.eightwastelands.event.ModNegativeEffectEvents;
 import com.px8042.eightwastelands.item.ModItems;
 import com.px8042.eightwastelands.menu.ModMenuTypes;
+import com.px8042.eightwastelands.recipe.ModRecipeSerializers;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -37,6 +38,7 @@ public class EightWastelands {
         ModItems.register(modEventBus);
         ModMobEffects.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+        ModRecipeSerializers.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);

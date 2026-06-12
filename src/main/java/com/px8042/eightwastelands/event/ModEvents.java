@@ -26,6 +26,7 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import com.px8042.eightwastelands.item.ModItems;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -346,6 +347,8 @@ public class ModEvents {
 
         CompoundTag memory = data.getCompoundOrEmpty(ForgetfulnessItem.BUFF_MEMORY);
 
+        long gameTime = player.level().getGameTime();
+
         Set<String> activeKeys = new HashSet<>();
 
         for (MobEffectInstance effectInstance : new ArrayList<>(player.getActiveEffects())) {
@@ -390,6 +393,16 @@ public class ModEvents {
                 continue;
             }
 
+            if (rememberedDuration <= ForgetfulnessItem.BUFF_RENEW_THRESHOLD) {
+                continue;
+            }
+
+            long renewAfterTime = saved.getLongOr(ForgetfulnessItem.BUFF_RENEW_AFTER_TIME, 0L);
+
+            if (gameTime < renewAfterTime) {
+                continue;
+            }
+
             player.addEffect(new MobEffectInstance(
                     effect,
                     rememberedDuration,
@@ -403,6 +416,13 @@ public class ModEvents {
                     forgetfulness,
                     ForgetfulnessItem.BUFF_RENEW_DURABILITY_COST
             );
+
+            saved.putLong(
+                    ForgetfulnessItem.BUFF_RENEW_AFTER_TIME,
+                    gameTime + rememberedDuration - ForgetfulnessItem.BUFF_RENEW_THRESHOLD
+            );
+
+            memory.put(key, saved);
         }
 
         for (String key : new ArrayList<>(memory.keySet())) {
@@ -443,6 +463,164 @@ public class ModEvents {
         data.remove(ForgetfulnessItem.FORGOTTEN_HEALTH_RESTORE_TIME);
         data.remove(ForgetfulnessItem.FORGOTTEN_HEALTH_BEFORE_DAMAGE);
         data.remove(ForgetfulnessItem.BUFF_MEMORY);
+    }
+
+    private void tickGhostBlood(Player player) {
+
+        if (!player.isAlive()) {
+            return;
+        }
+
+        ItemStack ghostBlood = getGhostBloodEquippedStack(player);
+
+        if (ghostBlood.isEmpty()) {
+            return;
+        }
+
+        if (ArtifactDurabilityHelper.isBroken(ghostBlood)) {
+            return;
+        }
+
+        if (!GhostBloodItem.isReady(player)) {
+            return;
+        }
+
+        if (player.getHealth() > player.getMaxHealth() * GhostBloodItem.TRIGGER_HEALTH_RATIO) {
+            return;
+        }
+
+        player.setHealth(player.getMaxHealth());
+
+        player.addEffect(new MobEffectInstance(
+                MobEffects.SPEED,
+                GhostBloodItem.BUFF_DURATION,
+                GhostBloodItem.BUFF_AMPLIFIER,
+                false,
+                true,
+                true
+        ));
+
+        player.addEffect(new MobEffectInstance(
+                MobEffects.STRENGTH,
+                GhostBloodItem.BUFF_DURATION,
+                GhostBloodItem.BUFF_AMPLIFIER,
+                false,
+                true,
+                true
+        ));
+
+        ArtifactDurabilityHelper.damageArtifact(
+                ghostBlood,
+                GhostBloodItem.DURABILITY_COST
+        );
+
+        GhostBloodItem.startCooldown(player);
+
+        player.sendOverlayMessage(
+                Component.translatable("message.eightwastelands.ghost_blood.triggered")
+        );
+    }
+
+    private ItemStack getGhostBloodEquippedStack(Player player) {
+
+        final ItemStack[] found = {ItemStack.EMPTY};
+
+        CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
+            curiosInventory.getStacksHandler(IGhostArtifactItem.SLOT_ID).ifPresent(stacksHandler -> {
+
+                var stacks = stacksHandler.getStacks();
+
+                for (int slot = 0; slot < stacks.getSlots(); slot++) {
+
+                    ItemStack stack = stacks.getStackInSlot(slot);
+
+                    if (stack.is(ModItems.GHOST_BLOOD.get())) {
+                        found[0] = stack;
+                        return;
+                    }
+                }
+            });
+        });
+
+        return found[0];
+    }
+
+    @SubscribeEvent
+    public void onPlayerWakeUp(PlayerWakeUpEvent event) {
+
+        Player player = event.getEntity();
+
+        if (player.level().isClientSide()) {
+            return;
+        }
+
+        ItemStack sleepwalkingGhost = getSleepwalkingGhostEquippedStack(player);
+
+        if (sleepwalkingGhost.isEmpty()) {
+            return;
+        }
+
+        if (ArtifactDurabilityHelper.isBroken(sleepwalkingGhost)) {
+            return;
+        }
+
+        if (!SleepwalkingGhostItem.isReady(player)) {
+            return;
+        }
+
+        ItemStack reward = createSleepwalkingReward(player);
+
+        if (!player.addItem(reward.copy())) {
+            player.drop(reward, false);
+        }
+
+        ArtifactDurabilityHelper.damageArtifact(
+                sleepwalkingGhost,
+                SleepwalkingGhostItem.DURABILITY_COST
+        );
+        SleepwalkingGhostItem.startCooldown(player);
+
+        player.sendOverlayMessage(
+                Component.translatable("message.eightwastelands.sleepwalking_ghost.reward")
+        );
+    }
+
+    private ItemStack getSleepwalkingGhostEquippedStack(Player player) {
+
+        final ItemStack[] found = {ItemStack.EMPTY};
+
+        CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
+            curiosInventory.getStacksHandler(IGhostArtifactItem.SLOT_ID).ifPresent(stacksHandler -> {
+
+                var stacks = stacksHandler.getStacks();
+
+                for (int slot = 0; slot < stacks.getSlots(); slot++) {
+
+                    ItemStack stack = stacks.getStackInSlot(slot);
+
+                    if (stack.is(ModItems.SLEEPWALKING_GHOST.get())) {
+                        found[0] = stack;
+                        return;
+                    }
+                }
+            });
+        });
+
+        return found[0];
+    }
+
+    private ItemStack createSleepwalkingReward(Player player) {
+
+        int roll = player.getRandom().nextInt(6);
+
+        return switch (roll) {
+            case 0 -> new ItemStack(Items.DIAMOND, 1);
+            case 1 -> new ItemStack(Items.EMERALD, 2);
+            case 2 -> new ItemStack(Items.GOLD_INGOT, 4);
+            case 3 -> new ItemStack(Items.IRON_INGOT, 6);
+            case 4 -> new ItemStack(Items.LAPIS_LAZULI, 8);
+            default -> new ItemStack(Items.REDSTONE, 8);
+        };
     }
     
     private void resetHeavenlyThunderSealCountOnDeath(Player player) {
@@ -843,6 +1021,7 @@ public class ModEvents {
 
         recordForgetfulnessDamage(event);
         clearFengxingBootsOnDamage(event);
+        damageJadeMarrowPendantOnHurt(event);
     }
     
     private void applyBihuoPearl(Pre event) {
@@ -907,6 +1086,110 @@ public class ModEvents {
                     ItemStack stack = stacks.getStackInSlot(slot);
 
                     if (stack.is(ModItems.BIHUO_PEARL.get())) {
+                        found[0] = stack;
+                        return;
+                    }
+                }
+            });
+        });
+
+        return found[0];
+    }
+
+    private void damageJadeMarrowPendantOnHurt(Pre event) {
+
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        if (player.level().isClientSide()) {
+            return;
+        }
+
+        if (event.getNewDamage() <= 0.0F) {
+            return;
+        }
+
+        ItemStack pendant = getJadeMarrowPendantEquippedStack(player);
+
+        if (pendant.isEmpty()) {
+            return;
+        }
+
+        if (ArtifactDurabilityHelper.isBroken(pendant)) {
+            removeJadeMarrowPendantMaxHealth(player);
+            return;
+        }
+
+        ArtifactDurabilityHelper.damageArtifact(
+                pendant,
+                JadeMarrowPendantItem.DAMAGE_TAKEN_DURABILITY_COST
+        );
+
+        if (ArtifactDurabilityHelper.isBroken(pendant)) {
+            removeJadeMarrowPendantMaxHealth(player);
+        }
+    }
+
+    private void tickJadeMarrowPendant(Player player) {
+
+        ItemStack pendant = getJadeMarrowPendantEquippedStack(player);
+
+        if (pendant.isEmpty() || ArtifactDurabilityHelper.isBroken(pendant)) {
+            removeJadeMarrowPendantMaxHealth(player);
+            return;
+        }
+
+        AttributeInstance maxHealth = player.getAttribute(Attributes.MAX_HEALTH);
+
+        if (maxHealth == null) {
+            return;
+        }
+
+        if (maxHealth.getModifier(JadeMarrowPendantItem.MAX_HEALTH_MODIFIER_ID) != null) {
+            return;
+        }
+
+        maxHealth.addTransientModifier(new AttributeModifier(
+                JadeMarrowPendantItem.MAX_HEALTH_MODIFIER_ID,
+                JadeMarrowPendantItem.MAX_HEALTH_BONUS,
+                AttributeModifier.Operation.ADD_VALUE
+        ));
+    }
+
+    private void removeJadeMarrowPendantMaxHealth(Player player) {
+
+        AttributeInstance maxHealth = player.getAttribute(Attributes.MAX_HEALTH);
+
+        if (maxHealth == null) {
+            return;
+        }
+
+        if (maxHealth.getModifier(JadeMarrowPendantItem.MAX_HEALTH_MODIFIER_ID) == null) {
+            return;
+        }
+
+        maxHealth.removeModifier(JadeMarrowPendantItem.MAX_HEALTH_MODIFIER_ID);
+
+        if (player.getHealth() > player.getMaxHealth()) {
+            player.setHealth(player.getMaxHealth());
+        }
+    }
+
+    private ItemStack getJadeMarrowPendantEquippedStack(Player player) {
+
+        final ItemStack[] found = {ItemStack.EMPTY};
+
+        CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
+            curiosInventory.getStacksHandler(IHeavenlyArtifactItem.SLOT_ID).ifPresent(stacksHandler -> {
+
+                var stacks = stacksHandler.getStacks();
+
+                for (int slot = 0; slot < stacks.getSlots(); slot++) {
+
+                    ItemStack stack = stacks.getStackInSlot(slot);
+
+                    if (stack.is(ModItems.JADE_MARROW_PENDANT.get())) {
                         found[0] = stack;
                         return;
                     }
@@ -1407,6 +1690,8 @@ public class ModEvents {
         removeWindEvilIfInactive(player);
 
         tickGhostArtifactAutoRepair(player);
+        tickJadeMarrowPendant(player);
+        tickGhostBlood(player);
         tickForgetfulness(player);
         tickFengxingBoots(player);
 

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:materials/fabao/cores",
+    "#eightwastelands:materials/fabao/metals",
+    "#eightwastelands:materials/fabao/formation",
+    "#eightwastelands:materials/fabao/sword_blanks",
+    "eightwastelands:sword_intent_shard",
+    "eightwastelands:edge_tempering_stone"
+  ]
+}

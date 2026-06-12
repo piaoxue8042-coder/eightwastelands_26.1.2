@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "eightwastelands:forgetfulness"
+    "eightwastelands:forgetfulness",
+    "eightwastelands:sleepwalking_ghost",
+    "eightwastelands:ghost_blood",
+    "eightwastelands:ghost_brain"
   ]
 }

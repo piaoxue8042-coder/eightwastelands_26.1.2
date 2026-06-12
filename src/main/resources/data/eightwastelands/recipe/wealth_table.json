@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "eightwastelands:wealth",
+    "minecraft:crafting_table"
+  ],
+  "result": {
+    "id": "eightwastelands:wealth_table",
+    "count": 1
+  }
+}

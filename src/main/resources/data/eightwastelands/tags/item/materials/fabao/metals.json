@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "eightwastelands:spirit_iron_ingot",
+    "eightwastelands:cold_iron_ingot",
+    "eightwastelands:dark_steel_ingot",
+    "eightwastelands:thunder_steel_ingot"
+  ]
+}
