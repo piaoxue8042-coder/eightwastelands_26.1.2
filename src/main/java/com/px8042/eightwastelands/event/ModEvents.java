@@ -28,7 +28,6 @@ import com.px8042.eightwastelands.item.ModItems;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
 import top.theillusivec4.curios.api.CuriosApi;
-import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import com.px8042.eightwastelands.effect.ModMobEffects;
 import net.minecraft.world.entity.Entity;
@@ -68,10 +67,6 @@ import java.util.Comparator;
 
 public class ModEvents {
     private static final double LUCK_DEPRIVATION_RANGE = 32.0D;
-    private static final String HAS_RECEIVED_NINE_HEAVENS_PUNISHMENT =
-            "eightwastelands_has_received_nine_heavens_punishment";  
-    private static final String SHOULD_RESTORE_NINE_HEAVENS_PUNISHMENT =
-            "eightwastelands_should_restore_nine_heavens_punishment";  
     private static final float WITHERED_BLOOD_REVERSE_MAX_HEALTH = 100.0F;
     private static final int LOU_ZHEN_REPAIR_AMOUNT = 100;
     private static final int LOU_ZHEN_REPAIR_LEVEL_COST = 3;  
@@ -201,14 +196,6 @@ public class ModEvents {
 
         resetHeavenlyThunderSealCountOnDeath(player);
         clearForgetfulnessMemory(player);
-
-        if (hasNineHeavensPunishment(player)) {
-            player.getPersistentData().putBoolean(
-                    SHOULD_RESTORE_NINE_HEAVENS_PUNISHMENT,
-                    true
-            );
-        }
-
     }
     
     private ItemStack getForgetfulnessEquippedStack(Player player) {
@@ -633,64 +620,6 @@ public class ModEvents {
 
         data.remove(HeavenlyThunderSealItem.HEAVENLY_THUNDER_COUNT);
     }
-    
-    @SubscribeEvent
-    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-
-        Player player = event.getEntity();
-
-        if (player.level().isClientSide()) {
-            return;
-        }
-
-        CompoundTag data = player.getPersistentData();
-
-        if (!data.getBooleanOr(SHOULD_RESTORE_NINE_HEAVENS_PUNISHMENT, false)) {
-            return;
-        }
-
-        data.remove(SHOULD_RESTORE_NINE_HEAVENS_PUNISHMENT);
-
-        if (hasNineHeavensPunishment(player)) {
-            return;
-        }
-
-        ItemStack stack = new ItemStack(ModItems.NINE_HEAVENS_PUNISHMENT.get());
-
-        if (!tryEquipToCalamitySlot(player, stack)) {
-            if (!player.getInventory().add(stack)) {
-                player.drop(stack, false);
-            }
-        }
-    }
-    
-    private boolean hasNineHeavensPunishment(Player player) {
-
-        if (player.getInventory().contains(new ItemStack(ModItems.NINE_HEAVENS_PUNISHMENT.get()))) {
-            return true;
-        }
-
-        final boolean[] found = {false};
-
-        CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
-            curiosInventory.getStacksHandler("calamity").ifPresent(stacksHandler -> {
-
-                var stacks = stacksHandler.getStacks();
-
-                for (int slot = 0; slot < stacks.getSlots(); slot++) {
-                    if (stacks.getStackInSlot(slot).is(ModItems.NINE_HEAVENS_PUNISHMENT.get())) {
-                        found[0] = true;
-                        return;
-                    }
-                }
-            });
-        });
-
-        return found[0];
-    }
-    
-    
-    
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
 
@@ -703,14 +632,6 @@ public class ModEvents {
 
         CompoundTag oldData = oldPlayer.getPersistentData();
         CompoundTag newData = newPlayer.getPersistentData();
-
-        if (oldData.getBooleanOr(SHOULD_RESTORE_NINE_HEAVENS_PUNISHMENT, false)) {
-            newData.putBoolean(SHOULD_RESTORE_NINE_HEAVENS_PUNISHMENT, true);
-        }
-
-        if (oldData.getBooleanOr(HAS_RECEIVED_NINE_HEAVENS_PUNISHMENT, false)) {
-            newData.putBoolean(HAS_RECEIVED_NINE_HEAVENS_PUNISHMENT, true);
-        }
 
         copyBooleanFlag(oldData, newData, NineHeavensPunishmentItem.LUCK_DEPRIVATION_REVERSED);
         copyBooleanFlag(oldData, newData, NineHeavensPunishmentItem.WIND_EVIL_REVERSED);
@@ -737,69 +658,6 @@ public class ModEvents {
             );
         }
     }
-    private void ensureNineHeavensPunishment(Player player) {
-
-        if (player.isCreative() || player.isSpectator()) {
-            return;
-        }
-
-        CompoundTag data = player.getPersistentData();
-
-        if (!data.getBooleanOr(HAS_RECEIVED_NINE_HEAVENS_PUNISHMENT, false)) {
-            data.putBoolean(HAS_RECEIVED_NINE_HEAVENS_PUNISHMENT, true);
-        }
-
-        if (!hasNineHeavensPunishment(player)) {
-            ItemStack stack = new ItemStack(ModItems.NINE_HEAVENS_PUNISHMENT.get());
-
-            if (!tryEquipToCalamitySlot(player, stack)) {
-                player.getInventory().add(stack);
-            }
-        }
-
-        removeDuplicateNineHeavensPunishment(player);
-    }
-    private void removeDuplicateNineHeavensPunishment(Player player) {
-
-        boolean hasCalamityOne = hasNineHeavensPunishmentInCalamity(player);
-
-        if (!hasCalamityOne) {
-            return;
-        }
-
-        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-
-            ItemStack stack = player.getInventory().getItem(i);
-
-            if (!stack.is(ModItems.NINE_HEAVENS_PUNISHMENT.get())) {
-                continue;
-            }
-
-            player.getInventory().setItem(i, ItemStack.EMPTY);
-        }
-    }
-    private boolean hasNineHeavensPunishmentInCalamity(Player player) {
-
-        final boolean[] found = {false};
-
-        CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
-            curiosInventory.getStacksHandler("calamity").ifPresent(stacksHandler -> {
-
-                var stacks = stacksHandler.getStacks();
-
-                for (int slot = 0; slot < stacks.getSlots(); slot++) {
-
-                    if (stacks.getStackInSlot(slot).is(ModItems.NINE_HEAVENS_PUNISHMENT.get())) {
-                        found[0] = true;
-                        return;
-                    }
-                }
-            });
-        });
-
-        return found[0];
-    }
-    
     @SubscribeEvent
     public void onVillagerKilledByBloodSkull(LivingDeathEvent event) {
 
@@ -868,91 +726,6 @@ public class ModEvents {
         });
 
         return found[0];
-    }
-
-
-    
-    @SubscribeEvent
-    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-
-        Player player = event.getEntity();
-
-        if (player.level().isClientSide()) {
-            return;
-        }
-
-        CompoundTag data = player.getPersistentData();
-
-        if (data.getBooleanOr(HAS_RECEIVED_NINE_HEAVENS_PUNISHMENT, false)) {
-            return;
-        }
-
-        data.putBoolean(HAS_RECEIVED_NINE_HEAVENS_PUNISHMENT, true);
-
-        giveAndEquipNineHeavensPunishment(player);
-    }
-    private void giveAndEquipNineHeavensPunishment(Player player) {
-
-        ItemStack stack = new ItemStack(ModItems.NINE_HEAVENS_PUNISHMENT.get());
-
-        if (tryEquipToCalamitySlot(player, stack)) {
-            return;
-        }
-
-        if (!player.getInventory().add(stack)) {
-            player.drop(stack, false);
-        }
-    }
-    private boolean tryEquipToCalamitySlot(Player player, ItemStack stack) {
-
-        final boolean[] equipped = {false};
-
-        CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
-            curiosInventory.getStacksHandler("calamity").ifPresent(stacksHandler -> {
-
-                var stacks = stacksHandler.getStacks();
-
-                for (int slot = 0; slot < stacks.getSlots(); slot++) {
-
-                    if (!stacks.getStackInSlot(slot).isEmpty()) {
-                        continue;
-                    }
-
-                    stacks.setStackInSlot(slot, stack.copy());
-                    stack.setCount(0);
-                    equipped[0] = true;
-                    return;
-                }
-            });
-        });
-
-        return equipped[0];
-    }
-    
-
-    
-    @SubscribeEvent
-    public void onItemToss(ItemTossEvent event) {
-
-        Player player = event.getPlayer();
-
-        if (player.isCreative() || player.isSpectator()) {
-            return;
-        }
-
-        ItemStack stack = event.getEntity().getItem();
-
-        if (!stack.is(ModItems.NINE_HEAVENS_PUNISHMENT.get())) {
-            return;
-        }
-
-        event.setCanceled(true);
-
-        if (!player.getInventory().add(stack.copy())) {
-            player.drop(stack.copy(), false);
-        }
-
-        event.getEntity().discard();
     }
 
 
@@ -1700,8 +1473,6 @@ public class ModEvents {
 
         tryReverseWitheredBlood(player);
         tryReverseEarthDisaster(player);
-
-        ensureNineHeavensPunishment(player);
     }
     
     private void tickGhostArtifactAutoRepair(Player player) {

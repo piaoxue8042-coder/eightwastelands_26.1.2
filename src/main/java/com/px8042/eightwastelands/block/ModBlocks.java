@@ -1,8 +1,10 @@
 package com.px8042.eightwastelands.block;
 
 import com.px8042.eightwastelands.EightWastelands;
+import com.px8042.eightwastelands.block.custom.AlchemyFurnaceBlock;
 import com.px8042.eightwastelands.block.custom.LouZhenBlock;
 import com.px8042.eightwastelands.block.custom.WealthTableBlock;
+import com.px8042.eightwastelands.cultivation.CultivationRealm;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -40,6 +42,23 @@ public class ModBlocks {
             BLOCKS.register("wealth_table",
                     () -> new WealthTableBlock(
                             blockProperties("wealth_table", BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE))
+                    ));
+
+    public static final DeferredBlock<Block> ALCHEMY_FURNACE =
+            BLOCKS.register("alchemy_furnace",
+                    () -> new AlchemyFurnaceBlock(
+                            blockProperties("alchemy_furnace", BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)),
+                            CultivationRealm.QI_REFINING
+                    ));
+
+    public static final DeferredBlock<Block> FOUNDATION_BUILDING_ALCHEMY_FURNACE =
+            BLOCKS.register("foundation_building_alchemy_furnace",
+                    () -> new AlchemyFurnaceBlock(
+                            blockProperties(
+                                    "foundation_building_alchemy_furnace",
+                                    BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                            ),
+                            CultivationRealm.FOUNDATION_BUILDING
                     ));
 
     public static void register(IEventBus eventBus) {

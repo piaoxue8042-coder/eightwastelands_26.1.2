@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " B ",
+    "SFS",
+    "SSS"
+  ],
+  "key": {
+    "B": "eightwastelands:foundation_building_pill_base",
+    "F": "eightwastelands:alchemy_furnace",
+    "S": "minecraft:bricks"
+  },
+  "result": {
+    "id": "eightwastelands:foundation_building_alchemy_furnace",
+    "count": 1
+  }
+}

@@ -1,7 +1,8 @@
 package com.px8042.eightwastelands;
 
-import com.px8042.eightwastelands.client.gui.FabaoBagScreen;
+import com.px8042.eightwastelands.client.gui.AlchemyFurnaceScreen;
 import com.px8042.eightwastelands.client.gui.WealthTableScreen;
+import com.px8042.eightwastelands.client.CultivationClientEvents;
 import com.px8042.eightwastelands.menu.ModMenuTypes;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -13,6 +14,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
 
 
 @Mod(value = EightWastelands.MODID, dist = Dist.CLIENT)
@@ -24,6 +26,7 @@ public class EightWastelandsClient {
         
         
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        NeoForge.EVENT_BUS.register(new CultivationClientEvents());
     }
 
     @SubscribeEvent
@@ -35,7 +38,7 @@ public class EightWastelandsClient {
 
     @SubscribeEvent
     static void registerMenuScreens(RegisterMenuScreensEvent event) {
-        event.register(ModMenuTypes.FABAO_BAG.get(), FabaoBagScreen::new);
         event.register(ModMenuTypes.WEALTH_TABLE.get(), WealthTableScreen::new);
+        event.register(ModMenuTypes.ALCHEMY_FURNACE.get(), AlchemyFurnaceScreen::new);
     }
 }

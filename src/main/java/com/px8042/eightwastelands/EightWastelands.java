@@ -1,10 +1,17 @@
 package com.px8042.eightwastelands;
 import com.px8042.eightwastelands.block.ModBlocks;
-import com.px8042.eightwastelands.event.FabaoBagEvents;
+import com.px8042.eightwastelands.block.entity.ModBlockEntities;
+import com.px8042.eightwastelands.command.CultivationCommands;
+import com.px8042.eightwastelands.compat.damagenexus.DamageNexusBridge;
+import com.px8042.eightwastelands.event.CultivationCombatEvents;
+import com.px8042.eightwastelands.event.CultivationEvents;
+import com.px8042.eightwastelands.event.CultivationMonsterEvents;
+import com.px8042.eightwastelands.event.FabaoCurioEvents;
 import com.px8042.eightwastelands.event.ModEvents;
 import com.px8042.eightwastelands.event.ModNegativeEffectEvents;
 import com.px8042.eightwastelands.item.ModItems;
 import com.px8042.eightwastelands.menu.ModMenuTypes;
+import com.px8042.eightwastelands.network.ModNetwork;
 import com.px8042.eightwastelands.recipe.ModRecipeSerializers;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
@@ -35,6 +42,7 @@ public class EightWastelands {
     public EightWastelands(IEventBus modEventBus, ModContainer modContainer) {
         
         ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
         ModItems.register(modEventBus);
         ModMobEffects.register(modEventBus);
         ModMenuTypes.register(modEventBus);
@@ -42,6 +50,7 @@ public class EightWastelands {
         ModCreativeModeTabs.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(ModNetwork::registerPayloads);
 
 
         
@@ -49,8 +58,13 @@ public class EightWastelands {
         
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new ModEvents());
-        NeoForge.EVENT_BUS.register(new FabaoBagEvents());
+        NeoForge.EVENT_BUS.register(new FabaoCurioEvents());
         NeoForge.EVENT_BUS.register(new ModNegativeEffectEvents());
+        NeoForge.EVENT_BUS.register(new CultivationEvents());
+        NeoForge.EVENT_BUS.register(new CultivationCombatEvents());
+        NeoForge.EVENT_BUS.register(new CultivationMonsterEvents());
+        NeoForge.EVENT_BUS.register(new CultivationCommands());
+        NeoForge.EVENT_BUS.register(new DamageNexusBridge());
 
 
         

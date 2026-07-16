@@ -137,6 +137,10 @@ dependencies {
     // Curios API is needed at compile time, and the full mod is loaded in dev runtime.
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+
+    // DamageNexus is a required local mod dependency used for damage channels, rules, and armor/resistance handling.
+    compileOnly files(project.damage_nexus_jar)
+    localRuntime files(project.damage_nexus_jar)
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -147,6 +151,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
             curios_version_range   : curios_version_range,
+            damage_nexus_version_range: damage_nexus_version_range,
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,

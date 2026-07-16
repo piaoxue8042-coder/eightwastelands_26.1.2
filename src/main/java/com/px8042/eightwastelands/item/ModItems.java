@@ -2,10 +2,16 @@ package com.px8042.eightwastelands.item;
 
 import com.px8042.eightwastelands.EightWastelands;
 import com.px8042.eightwastelands.block.ModBlocks;
+import com.px8042.eightwastelands.cultivation.CultivationRealm;
 import com.px8042.eightwastelands.item.custom.*;
-import com.px8042.eightwastelands.item.fabao.FabaoBagItem;
 import com.px8042.eightwastelands.item.fabao.*;
 import com.px8042.eightwastelands.item.material.ModMaterialItem;
+import com.px8042.eightwastelands.item.pill.BreakthroughPillItem;
+import com.px8042.eightwastelands.item.pill.CultivationPillItem;
+import com.px8042.eightwastelands.item.pill.FoundationBuildingCultivationPillItem;
+import com.px8042.eightwastelands.item.pill.HealingPillItem;
+import com.px8042.eightwastelands.item.pill.PillGrade;
+import com.px8042.eightwastelands.item.pill.QiRefiningCultivationPillItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -30,6 +36,10 @@ public class ModItems {
 
     private static Item.Properties itemProperties(String name) {
         return new Item.Properties().setId(itemKey(name));
+    }
+
+    private static long minutes(int minutes) {
+        return minutes * 60L * 20L;
     }
 
     private static DeferredItem<Item> registerMaterial(String name) {
@@ -150,6 +160,20 @@ public class ModItems {
                             ModBlocks.WEALTH_TABLE.get(),
                             itemProperties("wealth_table").useBlockDescriptionPrefix()
                     ));
+
+    public static final DeferredItem<Item> ALCHEMY_FURNACE =
+            ITEMS.register("alchemy_furnace",
+                    () -> new BlockItem(
+                            ModBlocks.ALCHEMY_FURNACE.get(),
+                            itemProperties("alchemy_furnace").useBlockDescriptionPrefix()
+                    ));
+
+    public static final DeferredItem<Item> FOUNDATION_BUILDING_ALCHEMY_FURNACE =
+            ITEMS.register("foundation_building_alchemy_furnace",
+                    () -> new BlockItem(
+                            ModBlocks.FOUNDATION_BUILDING_ALCHEMY_FURNACE.get(),
+                            itemProperties("foundation_building_alchemy_furnace").useBlockDescriptionPrefix()
+                    ));
     
     public static final DeferredItem<Item> FENGXING_BOOTS =
             ITEMS.register("fengxing_boots",
@@ -175,108 +199,188 @@ public class ModItems {
                                     .durability(500)
                     ));
 
-    public static final DeferredItem<Item> FABAO_BAG =
-            ITEMS.register("fabao_bag",
-                    () -> new FabaoBagItem(
-                            itemProperties("fabao_bag").stacksTo(1)
+    public static final DeferredItem<Item> QI_REFINING_MONSTER_CORE =
+            registerMaterial("qi_refining_monster_core");
+    public static final DeferredItem<Item> FOUNDATION_BUILDING_MONSTER_CORE =
+            registerMaterial("foundation_building_monster_core");
+    public static final DeferredItem<Item> QI_REFINING_SPIRIT_HERB =
+            registerMaterial("qi_refining_spirit_herb");
+    public static final DeferredItem<Item> FOUNDATION_BUILDING_SPIRIT_HERB =
+            registerMaterial("foundation_building_spirit_herb");
+    public static final DeferredItem<Item> QI_REFINING_PILL_BASE = registerMaterial("qi_refining_pill_base");
+    public static final DeferredItem<Item> FOUNDATION_BUILDING_PILL_BASE =
+            registerMaterial("foundation_building_pill_base");
+    public static final DeferredItem<Item> QI_REFINING_BREAKTHROUGH_PILL_BASE =
+            registerMaterial("qi_refining_breakthrough_pill_base");
+    public static final DeferredItem<Item> FOUNDATION_BUILDING_BREAKTHROUGH_PILL_BASE =
+            registerMaterial("foundation_building_breakthrough_pill_base");
+
+    public static final DeferredItem<Item> CULTIVATION_PILL =
+            ITEMS.register("cultivation_pill",
+                    () -> new CultivationPillItem(
+                            itemProperties("cultivation_pill").stacksTo(16)
                     ));
 
-    public static final DeferredItem<Item> SPIRIT_CORE = registerMaterial("spirit_core");
-    public static final DeferredItem<Item> FORMATION_STONE = registerMaterial("formation_stone");
-    public static final DeferredItem<Item> SPIRIT_IRON_INGOT = registerMaterial("spirit_iron_ingot");
-    public static final DeferredItem<Item> COLD_IRON_INGOT = registerMaterial("cold_iron_ingot");
-    public static final DeferredItem<Item> DARK_STEEL_INGOT = registerMaterial("dark_steel_ingot");
-    public static final DeferredItem<Item> THUNDER_STEEL_INGOT = registerMaterial("thunder_steel_ingot");
-    public static final DeferredItem<Item> SWORD_BLANK = registerMaterial("sword_blank");
-    public static final DeferredItem<Item> SWORD_INTENT_SHARD = registerMaterial("sword_intent_shard");
-    public static final DeferredItem<Item> EDGE_TEMPERING_STONE = registerMaterial("edge_tempering_stone");
-
-    public static final DeferredItem<Item> IRONCOLD_BLADE =
-            ITEMS.register("ironcold_blade",
-                    () -> new IroncoldBladeItem(
-                            itemProperties("ironcold_blade")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> QI_REFINING_CULTIVATION_PILL =
+            ITEMS.register("qi_refining_cultivation_pill",
+                    () -> new QiRefiningCultivationPillItem(
+                            itemProperties("qi_refining_cultivation_pill").stacksTo(16)
                     ));
 
-    public static final DeferredItem<Item> HUOYUN_SWORD =
-            ITEMS.register("huoyun_sword",
-                    () -> new HuoyunSwordItem(
-                            itemProperties("huoyun_sword")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_CULTIVATION_PILL =
+            ITEMS.register("low_grade_qi_refining_cultivation_pill",
+                    () -> new QiRefiningCultivationPillItem(
+                            itemProperties("low_grade_qi_refining_cultivation_pill").stacksTo(16),
+                            PillGrade.LOW,
+                            5
                     ));
 
-    public static final DeferredItem<Item> KAITIAN_SWORD =
-            ITEMS.register("fucksky_sword",
-                    () -> new KaitianSwordItem(
-                            itemProperties("fucksky_sword")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> MIDDLE_GRADE_QI_REFINING_CULTIVATION_PILL =
+            ITEMS.register("middle_grade_qi_refining_cultivation_pill",
+                    () -> new QiRefiningCultivationPillItem(
+                            itemProperties("middle_grade_qi_refining_cultivation_pill").stacksTo(16),
+                            PillGrade.MIDDLE,
+                            10
                     ));
 
-    public static final DeferredItem<Item> BLOOD_DRINKING_BLADE =
-            ITEMS.register("blood_drinking_blade",
-                    () -> new BloodDrinkingBladeItem(
-                            itemProperties("blood_drinking_blade")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> HIGH_GRADE_QI_REFINING_CULTIVATION_PILL =
+            ITEMS.register("high_grade_qi_refining_cultivation_pill",
+                    () -> new QiRefiningCultivationPillItem(
+                            itemProperties("high_grade_qi_refining_cultivation_pill").stacksTo(16),
+                            PillGrade.HIGH,
+                            20
                     ));
 
-    public static final DeferredItem<Item> ZAOHUA_PISHAN_AXE =
-            ITEMS.register("fuckmountain_axe",
-                    () -> new ZaohuaPishanAxeItem(
-                            itemProperties("fuckmountain_axe")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> IMMORTAL_GRADE_QI_REFINING_CULTIVATION_PILL =
+            ITEMS.register("immortal_grade_qi_refining_cultivation_pill",
+                    () -> new QiRefiningCultivationPillItem(
+                            itemProperties("immortal_grade_qi_refining_cultivation_pill").stacksTo(16),
+                            PillGrade.IMMORTAL,
+                            50
                     ));
 
-    public static final DeferredItem<Item> TEST_FABAO =
-            ITEMS.register("test_fabao",
-                    () -> new TestFabaoItem(
-                            itemProperties("test_fabao")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> FOUNDATION_BUILDING_CULTIVATION_PILL =
+            ITEMS.register("foundation_building_cultivation_pill",
+                    () -> new FoundationBuildingCultivationPillItem(
+                            itemProperties("foundation_building_cultivation_pill").stacksTo(16)
                     ));
 
-    public static final DeferredItem<Item> TEST_QUICK_BLADE =
-            ITEMS.register("test_quick_blade",
-                    () -> new TestQuickBladeItem(
-                            itemProperties("test_quick_blade")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> LOW_GRADE_FOUNDATION_BUILDING_CULTIVATION_PILL =
+            ITEMS.register("low_grade_foundation_building_cultivation_pill",
+                    () -> new FoundationBuildingCultivationPillItem(
+                            itemProperties("low_grade_foundation_building_cultivation_pill").stacksTo(16),
+                            PillGrade.LOW,
+                            15
                     ));
 
-    public static final DeferredItem<Item> TEST_SPEAR_SHADOW =
-            ITEMS.register("test_spear_shadow",
-                    () -> new TestSpearShadowItem(
-                            itemProperties("test_spear_shadow")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> MIDDLE_GRADE_FOUNDATION_BUILDING_CULTIVATION_PILL =
+            ITEMS.register("middle_grade_foundation_building_cultivation_pill",
+                    () -> new FoundationBuildingCultivationPillItem(
+                            itemProperties("middle_grade_foundation_building_cultivation_pill").stacksTo(16),
+                            PillGrade.MIDDLE,
+                            30
                     ));
 
-    public static final DeferredItem<Item> TEST_SPINNING_AXE =
-            ITEMS.register("test_spinning_axe",
-                    () -> new TestSpinningAxeItem(
-                            itemProperties("test_spinning_axe")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> HIGH_GRADE_FOUNDATION_BUILDING_CULTIVATION_PILL =
+            ITEMS.register("high_grade_foundation_building_cultivation_pill",
+                    () -> new FoundationBuildingCultivationPillItem(
+                            itemProperties("high_grade_foundation_building_cultivation_pill").stacksTo(16),
+                            PillGrade.HIGH,
+                            60
                     ));
 
-    public static final DeferredItem<Item> TEST_FLAME_BAN_NEEDLE =
-            ITEMS.register("test_flame_ban_needle",
-                    () -> new TestFlameBanNeedleItem(
-                            itemProperties("test_flame_ban_needle")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> IMMORTAL_GRADE_FOUNDATION_BUILDING_CULTIVATION_PILL =
+            ITEMS.register("immortal_grade_foundation_building_cultivation_pill",
+                    () -> new FoundationBuildingCultivationPillItem(
+                            itemProperties("immortal_grade_foundation_building_cultivation_pill").stacksTo(16),
+                            PillGrade.IMMORTAL,
+                            150
                     ));
 
-    public static final DeferredItem<Item> TEST_COLD_ACCUMULATION_NEEDLE =
-            ITEMS.register("test_cold_accumulation_needle",
-                    () -> new TestColdAccumulationNeedleItem(
-                            itemProperties("test_cold_accumulation_needle")
-                                    .stacksTo(1)
-                                    .enchantable(15)
+    public static final DeferredItem<Item> HEALING_PILL =
+            ITEMS.register("healing_pill",
+                    () -> new HealingPillItem(
+                            itemProperties("healing_pill").stacksTo(16)
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_BREAKTHROUGH_PILL =
+            ITEMS.register("low_grade_qi_refining_breakthrough_pill",
+                    () -> new BreakthroughPillItem(
+                            itemProperties("low_grade_qi_refining_breakthrough_pill").stacksTo(16),
+                            CultivationRealm.QI_REFINING,
+                            PillGrade.LOW,
+                            0.10D,
+                            minutes(2)
+                    ));
+
+    public static final DeferredItem<Item> MIDDLE_GRADE_QI_REFINING_BREAKTHROUGH_PILL =
+            ITEMS.register("middle_grade_qi_refining_breakthrough_pill",
+                    () -> new BreakthroughPillItem(
+                            itemProperties("middle_grade_qi_refining_breakthrough_pill").stacksTo(16),
+                            CultivationRealm.QI_REFINING,
+                            PillGrade.MIDDLE,
+                            0.20D,
+                            minutes(4)
+                    ));
+
+    public static final DeferredItem<Item> HIGH_GRADE_QI_REFINING_BREAKTHROUGH_PILL =
+            ITEMS.register("high_grade_qi_refining_breakthrough_pill",
+                    () -> new BreakthroughPillItem(
+                            itemProperties("high_grade_qi_refining_breakthrough_pill").stacksTo(16),
+                            CultivationRealm.QI_REFINING,
+                            PillGrade.HIGH,
+                            0.35D,
+                            minutes(8)
+                    ));
+
+    public static final DeferredItem<Item> IMMORTAL_GRADE_QI_REFINING_BREAKTHROUGH_PILL =
+            ITEMS.register("immortal_grade_qi_refining_breakthrough_pill",
+                    () -> new BreakthroughPillItem(
+                            itemProperties("immortal_grade_qi_refining_breakthrough_pill").stacksTo(16),
+                            CultivationRealm.QI_REFINING,
+                            PillGrade.IMMORTAL,
+                            0.60D,
+                            minutes(15)
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_FOUNDATION_BUILDING_BREAKTHROUGH_PILL =
+            ITEMS.register("low_grade_foundation_building_breakthrough_pill",
+                    () -> new BreakthroughPillItem(
+                            itemProperties("low_grade_foundation_building_breakthrough_pill").stacksTo(16),
+                            CultivationRealm.FOUNDATION_BUILDING,
+                            PillGrade.LOW,
+                            0.10D,
+                            minutes(2)
+                    ));
+
+    public static final DeferredItem<Item> MIDDLE_GRADE_FOUNDATION_BUILDING_BREAKTHROUGH_PILL =
+            ITEMS.register("middle_grade_foundation_building_breakthrough_pill",
+                    () -> new BreakthroughPillItem(
+                            itemProperties("middle_grade_foundation_building_breakthrough_pill").stacksTo(16),
+                            CultivationRealm.FOUNDATION_BUILDING,
+                            PillGrade.MIDDLE,
+                            0.20D,
+                            minutes(4)
+                    ));
+
+    public static final DeferredItem<Item> HIGH_GRADE_FOUNDATION_BUILDING_BREAKTHROUGH_PILL =
+            ITEMS.register("high_grade_foundation_building_breakthrough_pill",
+                    () -> new BreakthroughPillItem(
+                            itemProperties("high_grade_foundation_building_breakthrough_pill").stacksTo(16),
+                            CultivationRealm.FOUNDATION_BUILDING,
+                            PillGrade.HIGH,
+                            0.35D,
+                            minutes(8)
+                    ));
+
+    public static final DeferredItem<Item> IMMORTAL_GRADE_FOUNDATION_BUILDING_BREAKTHROUGH_PILL =
+            ITEMS.register("immortal_grade_foundation_building_breakthrough_pill",
+                    () -> new BreakthroughPillItem(
+                            itemProperties("immortal_grade_foundation_building_breakthrough_pill").stacksTo(16),
+                            CultivationRealm.FOUNDATION_BUILDING,
+                            PillGrade.IMMORTAL,
+                            0.60D,
+                            minutes(15)
                     ));
 
     
