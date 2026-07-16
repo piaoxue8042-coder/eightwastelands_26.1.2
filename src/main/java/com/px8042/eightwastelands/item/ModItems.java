@@ -10,6 +10,7 @@ import com.px8042.eightwastelands.item.pill.BreakthroughPillItem;
 import com.px8042.eightwastelands.item.pill.CultivationPillItem;
 import com.px8042.eightwastelands.item.pill.FoundationBuildingCultivationPillItem;
 import com.px8042.eightwastelands.item.pill.HealingPillItem;
+import com.px8042.eightwastelands.item.pill.PillData;
 import com.px8042.eightwastelands.item.pill.PillGrade;
 import com.px8042.eightwastelands.item.pill.QiRefiningCultivationPillItem;
 import net.minecraft.core.registries.Registries;
@@ -36,10 +37,6 @@ public class ModItems {
 
     private static Item.Properties itemProperties(String name) {
         return new Item.Properties().setId(itemKey(name));
-    }
-
-    private static long minutes(int minutes) {
-        return minutes * 60L * 20L;
     }
 
     private static DeferredItem<Item> registerMaterial(String name) {
@@ -232,7 +229,7 @@ public class ModItems {
                     () -> new QiRefiningCultivationPillItem(
                             itemProperties("low_grade_qi_refining_cultivation_pill").stacksTo(16),
                             PillGrade.LOW,
-                            5
+                            PillData.cultivationQiGain(CultivationRealm.QI_REFINING, PillGrade.LOW)
                     ));
 
     public static final DeferredItem<Item> MIDDLE_GRADE_QI_REFINING_CULTIVATION_PILL =
@@ -240,7 +237,7 @@ public class ModItems {
                     () -> new QiRefiningCultivationPillItem(
                             itemProperties("middle_grade_qi_refining_cultivation_pill").stacksTo(16),
                             PillGrade.MIDDLE,
-                            10
+                            PillData.cultivationQiGain(CultivationRealm.QI_REFINING, PillGrade.MIDDLE)
                     ));
 
     public static final DeferredItem<Item> HIGH_GRADE_QI_REFINING_CULTIVATION_PILL =
@@ -248,7 +245,7 @@ public class ModItems {
                     () -> new QiRefiningCultivationPillItem(
                             itemProperties("high_grade_qi_refining_cultivation_pill").stacksTo(16),
                             PillGrade.HIGH,
-                            20
+                            PillData.cultivationQiGain(CultivationRealm.QI_REFINING, PillGrade.HIGH)
                     ));
 
     public static final DeferredItem<Item> IMMORTAL_GRADE_QI_REFINING_CULTIVATION_PILL =
@@ -256,7 +253,7 @@ public class ModItems {
                     () -> new QiRefiningCultivationPillItem(
                             itemProperties("immortal_grade_qi_refining_cultivation_pill").stacksTo(16),
                             PillGrade.IMMORTAL,
-                            50
+                            PillData.cultivationQiGain(CultivationRealm.QI_REFINING, PillGrade.IMMORTAL)
                     ));
 
     public static final DeferredItem<Item> FOUNDATION_BUILDING_CULTIVATION_PILL =
@@ -270,7 +267,7 @@ public class ModItems {
                     () -> new FoundationBuildingCultivationPillItem(
                             itemProperties("low_grade_foundation_building_cultivation_pill").stacksTo(16),
                             PillGrade.LOW,
-                            15
+                            PillData.cultivationQiGain(CultivationRealm.FOUNDATION_BUILDING, PillGrade.LOW)
                     ));
 
     public static final DeferredItem<Item> MIDDLE_GRADE_FOUNDATION_BUILDING_CULTIVATION_PILL =
@@ -278,7 +275,7 @@ public class ModItems {
                     () -> new FoundationBuildingCultivationPillItem(
                             itemProperties("middle_grade_foundation_building_cultivation_pill").stacksTo(16),
                             PillGrade.MIDDLE,
-                            30
+                            PillData.cultivationQiGain(CultivationRealm.FOUNDATION_BUILDING, PillGrade.MIDDLE)
                     ));
 
     public static final DeferredItem<Item> HIGH_GRADE_FOUNDATION_BUILDING_CULTIVATION_PILL =
@@ -286,7 +283,7 @@ public class ModItems {
                     () -> new FoundationBuildingCultivationPillItem(
                             itemProperties("high_grade_foundation_building_cultivation_pill").stacksTo(16),
                             PillGrade.HIGH,
-                            60
+                            PillData.cultivationQiGain(CultivationRealm.FOUNDATION_BUILDING, PillGrade.HIGH)
                     ));
 
     public static final DeferredItem<Item> IMMORTAL_GRADE_FOUNDATION_BUILDING_CULTIVATION_PILL =
@@ -294,7 +291,7 @@ public class ModItems {
                     () -> new FoundationBuildingCultivationPillItem(
                             itemProperties("immortal_grade_foundation_building_cultivation_pill").stacksTo(16),
                             PillGrade.IMMORTAL,
-                            150
+                            PillData.cultivationQiGain(CultivationRealm.FOUNDATION_BUILDING, PillGrade.IMMORTAL)
                     ));
 
     public static final DeferredItem<Item> HEALING_PILL =
@@ -309,8 +306,8 @@ public class ModItems {
                             itemProperties("low_grade_qi_refining_breakthrough_pill").stacksTo(16),
                             CultivationRealm.QI_REFINING,
                             PillGrade.LOW,
-                            0.10D,
-                            minutes(2)
+                            PillData.breakthroughChanceBonus(PillGrade.LOW),
+                            PillData.breakthroughCooldownReductionTicks(PillGrade.LOW)
                     ));
 
     public static final DeferredItem<Item> MIDDLE_GRADE_QI_REFINING_BREAKTHROUGH_PILL =
@@ -319,8 +316,8 @@ public class ModItems {
                             itemProperties("middle_grade_qi_refining_breakthrough_pill").stacksTo(16),
                             CultivationRealm.QI_REFINING,
                             PillGrade.MIDDLE,
-                            0.20D,
-                            minutes(4)
+                            PillData.breakthroughChanceBonus(PillGrade.MIDDLE),
+                            PillData.breakthroughCooldownReductionTicks(PillGrade.MIDDLE)
                     ));
 
     public static final DeferredItem<Item> HIGH_GRADE_QI_REFINING_BREAKTHROUGH_PILL =
@@ -329,8 +326,8 @@ public class ModItems {
                             itemProperties("high_grade_qi_refining_breakthrough_pill").stacksTo(16),
                             CultivationRealm.QI_REFINING,
                             PillGrade.HIGH,
-                            0.35D,
-                            minutes(8)
+                            PillData.breakthroughChanceBonus(PillGrade.HIGH),
+                            PillData.breakthroughCooldownReductionTicks(PillGrade.HIGH)
                     ));
 
     public static final DeferredItem<Item> IMMORTAL_GRADE_QI_REFINING_BREAKTHROUGH_PILL =
@@ -339,8 +336,8 @@ public class ModItems {
                             itemProperties("immortal_grade_qi_refining_breakthrough_pill").stacksTo(16),
                             CultivationRealm.QI_REFINING,
                             PillGrade.IMMORTAL,
-                            0.60D,
-                            minutes(15)
+                            PillData.breakthroughChanceBonus(PillGrade.IMMORTAL),
+                            PillData.breakthroughCooldownReductionTicks(PillGrade.IMMORTAL)
                     ));
 
     public static final DeferredItem<Item> LOW_GRADE_FOUNDATION_BUILDING_BREAKTHROUGH_PILL =
@@ -349,8 +346,8 @@ public class ModItems {
                             itemProperties("low_grade_foundation_building_breakthrough_pill").stacksTo(16),
                             CultivationRealm.FOUNDATION_BUILDING,
                             PillGrade.LOW,
-                            0.10D,
-                            minutes(2)
+                            PillData.breakthroughChanceBonus(PillGrade.LOW),
+                            PillData.breakthroughCooldownReductionTicks(PillGrade.LOW)
                     ));
 
     public static final DeferredItem<Item> MIDDLE_GRADE_FOUNDATION_BUILDING_BREAKTHROUGH_PILL =
@@ -359,8 +356,8 @@ public class ModItems {
                             itemProperties("middle_grade_foundation_building_breakthrough_pill").stacksTo(16),
                             CultivationRealm.FOUNDATION_BUILDING,
                             PillGrade.MIDDLE,
-                            0.20D,
-                            minutes(4)
+                            PillData.breakthroughChanceBonus(PillGrade.MIDDLE),
+                            PillData.breakthroughCooldownReductionTicks(PillGrade.MIDDLE)
                     ));
 
     public static final DeferredItem<Item> HIGH_GRADE_FOUNDATION_BUILDING_BREAKTHROUGH_PILL =
@@ -369,8 +366,8 @@ public class ModItems {
                             itemProperties("high_grade_foundation_building_breakthrough_pill").stacksTo(16),
                             CultivationRealm.FOUNDATION_BUILDING,
                             PillGrade.HIGH,
-                            0.35D,
-                            minutes(8)
+                            PillData.breakthroughChanceBonus(PillGrade.HIGH),
+                            PillData.breakthroughCooldownReductionTicks(PillGrade.HIGH)
                     ));
 
     public static final DeferredItem<Item> IMMORTAL_GRADE_FOUNDATION_BUILDING_BREAKTHROUGH_PILL =
@@ -379,8 +376,8 @@ public class ModItems {
                             itemProperties("immortal_grade_foundation_building_breakthrough_pill").stacksTo(16),
                             CultivationRealm.FOUNDATION_BUILDING,
                             PillGrade.IMMORTAL,
-                            0.60D,
-                            minutes(15)
+                            PillData.breakthroughChanceBonus(PillGrade.IMMORTAL),
+                            PillData.breakthroughCooldownReductionTicks(PillGrade.IMMORTAL)
                     ));
 
     

@@ -104,6 +104,39 @@ public class AlchemyManager {
         return Optional.of(rollWeightedGrade(mastery, random));
     }
 
+    public static Optional<AlchemyGradeChances> getGradeChances(
+            CultivationRealm alchemyRealm,
+            AlchemyMastery mastery,
+            CultivationRealm pillRealm
+    ) {
+        int realmDifference = alchemyRealm.getIndex() - pillRealm.getIndex();
+        if (realmDifference < -1) {
+            return Optional.empty();
+        }
+
+        if (realmDifference == -1) {
+            return Optional.of(new AlchemyGradeChances(100, 0, 0, 0, true));
+        }
+
+        int[] weights = SAME_REALM_WEIGHTS[mastery.getIndex()];
+        int totalWeight = 0;
+        for (int weight : weights) {
+            totalWeight += weight;
+        }
+
+        if (totalWeight <= 0) {
+            return Optional.of(new AlchemyGradeChances(100, 0, 0, 0, false));
+        }
+
+        return Optional.of(new AlchemyGradeChances(
+                toPercent(weights[0], totalWeight),
+                toPercent(weights[1], totalWeight),
+                toPercent(weights[2], totalWeight),
+                toPercent(weights[3], totalWeight),
+                false
+        ));
+    }
+
     public static AlchemyProgressResult recordPillRefined(
             ServerPlayer player,
             CultivationRealm pillRealm,
@@ -235,6 +268,10 @@ public class AlchemyManager {
         return PillGrade.LOW;
     }
 
+    private static int toPercent(int weight, int totalWeight) {
+        return (int) Math.round(weight * 100.0D / totalWeight);
+    }
+
     private static void copyInt(CompoundTag oldData, CompoundTag newData, String key) {
         if (oldData.contains(key)) {
             newData.putInt(key, oldData.getIntOr(key, 0));
@@ -255,5 +292,23 @@ public class AlchemyManager {
             int gainedExperience,
             boolean advanced
     ) {
+    }
+
+    public record AlchemyGradeChances(
+            int low,
+            int middle,
+            int high,
+            int immortal,
+            boolean forcedLowGrade
+    ) {
+        public int get(PillGrade grade) {
+            return switch (grade) {
+                case LOW -> this.low;
+                case MIDDLE -> this.middle;
+                case HIGH -> this.high;
+                case IMMORTAL -> this.immortal;
+                case NONE -> 0;
+            };
+        }
     }
 }

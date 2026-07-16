@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#eightwastelands:materials/monster_cores/qi_refining",
+    "#eightwastelands:materials/monster_cores/qi_refining"
+  ],
+  "result": {
+    "id": "eightwastelands:qi_refining_breakthrough_pill_base",
+    "count": 1
+  }
+}

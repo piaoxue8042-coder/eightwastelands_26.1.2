@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:materials/monster_cores",
+    "#eightwastelands:materials/spirit_herbs"
+  ]
+}

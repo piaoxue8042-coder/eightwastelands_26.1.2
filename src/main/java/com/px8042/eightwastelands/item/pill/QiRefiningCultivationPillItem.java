@@ -4,10 +4,12 @@ import com.px8042.eightwastelands.cultivation.CultivationRealm;
 
 public class QiRefiningCultivationPillItem extends AbstractCultivationPillItem {
 
-    private static final int LEGACY_QI_GAIN = 50;
-
     public QiRefiningCultivationPillItem(Properties properties) {
-        this(properties, PillGrade.IMMORTAL, LEGACY_QI_GAIN);
+        this(
+                properties,
+                PillGrade.IMMORTAL,
+                PillData.cultivationQiGain(CultivationRealm.QI_REFINING, PillGrade.IMMORTAL)
+        );
     }
 
     public QiRefiningCultivationPillItem(Properties properties, PillGrade grade, int qiGain) {

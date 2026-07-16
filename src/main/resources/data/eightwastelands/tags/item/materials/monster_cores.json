@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#eightwastelands:materials/monster_cores/qi_refining",
+    "#eightwastelands:materials/monster_cores/foundation_building"
+  ]
+}
