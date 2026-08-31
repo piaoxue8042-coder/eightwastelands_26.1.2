@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:bone",
+    "minecraft:iron_ingot",
+    "eightwastelands:wudao_sand",
+    "#eightwastelands:materials/monster_cores/qi_refining"
+  ],
+  "result": {
+    "id": "eightwastelands:body_tempering_manual",
+    "count": 1
+  }
+}

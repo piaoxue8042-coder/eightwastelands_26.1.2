@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "eightwastelands:qi_refining_manual"
+    "eightwastelands:qi_refining_manual",
+    "eightwastelands:body_tempering_manual"
   ]
 }

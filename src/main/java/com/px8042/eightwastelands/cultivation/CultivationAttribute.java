@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 public enum CultivationAttribute {
     MAX_HEALTH(Attributes.MAX_HEALTH, "cultivation_max_health"),
     ATTACK_DAMAGE(Attributes.ATTACK_DAMAGE, "cultivation_attack_damage"),
+    ATTACK_SPEED(Attributes.ATTACK_SPEED, "cultivation_attack_speed"),
     MOVEMENT_SPEED(Attributes.MOVEMENT_SPEED, "cultivation_movement_speed"),
 
     CRIT_CHANCE(ModAttributes.CRIT_CHANCE, "cultivation_crit_chance"),

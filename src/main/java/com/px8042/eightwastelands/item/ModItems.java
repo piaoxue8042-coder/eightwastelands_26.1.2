@@ -13,6 +13,7 @@ import com.px8042.eightwastelands.item.pill.HealingPillItem;
 import com.px8042.eightwastelands.item.pill.PillData;
 import com.px8042.eightwastelands.item.pill.PillGrade;
 import com.px8042.eightwastelands.item.pill.QiRefiningCultivationPillItem;
+import com.px8042.eightwastelands.item.xinfa.BodyTemperingManualItem;
 import com.px8042.eightwastelands.item.xinfa.QiRefiningManualItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -221,6 +222,12 @@ public class ModItems {
             ITEMS.register("qi_refining_manual",
                     () -> new QiRefiningManualItem(
                             itemProperties("qi_refining_manual").stacksTo(1)
+                    ));
+
+    public static final DeferredItem<Item> BODY_TEMPERING_MANUAL =
+            ITEMS.register("body_tempering_manual",
+                    () -> new BodyTemperingManualItem(
+                            itemProperties("body_tempering_manual").stacksTo(1)
                     ));
 
     public static final DeferredItem<Item> CULTIVATION_PILL =
