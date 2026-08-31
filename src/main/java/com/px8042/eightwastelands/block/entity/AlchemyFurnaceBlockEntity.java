@@ -222,7 +222,12 @@ public class AlchemyFurnaceBlockEntity extends BaseContainerBlockEntity {
         this.items.get(SLOT_INPUT).shrink(1);
 
         AlchemyManager.AlchemyProgressResult progress =
-                AlchemyManager.recordPillRefined(serverPlayer, formula.realm(), this.pendingGrade);
+                AlchemyManager.recordPillRefined(
+                        serverPlayer,
+                        formula.realm(),
+                        this.pendingGrade,
+                        formula.experienceMultiplier()
+                );
         CultivationManager.syncTo(serverPlayer);
 
         serverPlayer.sendSystemMessage(Component.translatable(

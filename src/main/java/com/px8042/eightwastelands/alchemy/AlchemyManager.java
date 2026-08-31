@@ -142,11 +142,20 @@ public class AlchemyManager {
             CultivationRealm pillRealm,
             PillGrade grade
     ) {
+        return recordPillRefined(player, pillRealm, grade, 1.0D);
+    }
+
+    public static AlchemyProgressResult recordPillRefined(
+            ServerPlayer player,
+            CultivationRealm pillRealm,
+            PillGrade grade,
+            double experienceMultiplier
+    ) {
         CompoundTag data = player.getPersistentData();
         CultivationRealm oldRealm = getRealm(data);
         AlchemyMastery oldMastery = getMastery(data);
         int oldExperience = getExperience(data);
-        int gainedExperience = calculateExperienceGain(oldRealm, pillRealm, grade);
+        int gainedExperience = calculateExperienceGain(oldRealm, pillRealm, grade, experienceMultiplier);
 
         CultivationRealm newRealm = oldRealm;
         AlchemyMastery newMastery = oldMastery;
@@ -209,7 +218,8 @@ public class AlchemyManager {
     private static int calculateExperienceGain(
             CultivationRealm alchemyRealm,
             CultivationRealm pillRealm,
-            PillGrade grade
+            PillGrade grade,
+            double experienceMultiplier
     ) {
         int baseExperience = switch (grade) {
             case NONE -> 0;
@@ -220,19 +230,26 @@ public class AlchemyManager {
         };
 
         int realmDifference = pillRealm.getIndex() - alchemyRealm.getIndex();
+        int experience;
         if (realmDifference > 0) {
-            return baseExperience * 2;
+            experience = baseExperience * 2;
+        } else if (realmDifference == 0) {
+            experience = baseExperience;
+        } else if (realmDifference == -1) {
+            experience = Math.max(1, baseExperience / 3);
+        } else {
+            experience = 0;
         }
 
-        if (realmDifference == 0) {
-            return baseExperience;
+        return applyExperienceMultiplier(experience, experienceMultiplier);
+    }
+
+    private static int applyExperienceMultiplier(int experience, double multiplier) {
+        if (experience <= 0 || multiplier <= 0.0D) {
+            return 0;
         }
 
-        if (realmDifference == -1) {
-            return Math.max(1, baseExperience / 3);
-        }
-
-        return 0;
+        return Math.max(1, (int) Math.round(experience * multiplier));
     }
 
     private static boolean isMaxLevel(CultivationRealm realm, AlchemyMastery mastery) {

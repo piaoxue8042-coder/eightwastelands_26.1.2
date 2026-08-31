@@ -17,6 +17,7 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
@@ -34,16 +35,21 @@ public class CultivationClientEvents {
 
         event.addListener(Button.builder(
                         Component.translatable("button.eightwastelands.cultivation.bookmark"),
-                        button -> {
-                            Minecraft.getInstance().setScreen(new CultivationScreen());
-                            ClientPacketDistributor.sendToServer(new CultivationActionPayload(
-                                    CultivationActionPayload.ACTION_REQUEST_SYNC
-                            ));
-                        }
+                        button -> openCultivationScreen()
                 )
                 .bounds(buttonX, buttonY, 48, 18)
                 .tooltip(Tooltip.create(Component.translatable("screen.eightwastelands.cultivation")))
                 .build());
+    }
+
+    @SubscribeEvent
+    public void onClientTick(ClientTickEvent.Post event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        while (ModKeyMappings.OPEN_CULTIVATION.consumeClick()) {
+            if (minecraft.player != null && minecraft.level != null && minecraft.screen == null) {
+                openCultivationScreen();
+            }
+        }
     }
 
     @SubscribeEvent
@@ -100,5 +106,12 @@ public class CultivationClientEvents {
                     chanceValues.get(grade)
             ).withStyle(ChatFormatting.AQUA));
         }
+    }
+
+    private static void openCultivationScreen() {
+        Minecraft.getInstance().setScreen(new CultivationScreen());
+        ClientPacketDistributor.sendToServer(new CultivationActionPayload(
+                CultivationActionPayload.ACTION_REQUEST_SYNC
+        ));
     }
 }

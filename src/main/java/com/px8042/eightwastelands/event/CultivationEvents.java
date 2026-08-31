@@ -2,6 +2,7 @@ package com.px8042.eightwastelands.event;
 
 import com.px8042.eightwastelands.alchemy.AlchemyManager;
 import com.px8042.eightwastelands.cultivation.CultivationManager;
+import com.px8042.eightwastelands.xinfa.XinfaManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -15,6 +16,7 @@ public class CultivationEvents {
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             CultivationManager.applyAttributes(player);
+            XinfaManager.applyAttributes(player);
             CultivationManager.syncTo(player);
         }
     }
@@ -23,6 +25,7 @@ public class CultivationEvents {
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             CultivationManager.applyAttributes(player);
+            XinfaManager.applyAttributes(player);
             CultivationManager.syncTo(player);
         }
     }
@@ -31,6 +34,7 @@ public class CultivationEvents {
     public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             CultivationManager.applyAttributes(player);
+            XinfaManager.applyAttributes(player);
             CultivationManager.syncTo(player);
         }
     }
@@ -42,6 +46,10 @@ public class CultivationEvents {
                 event.getEntity().getPersistentData()
         );
         AlchemyManager.copyData(
+                event.getOriginal().getPersistentData(),
+                event.getEntity().getPersistentData()
+        );
+        XinfaManager.copyData(
                 event.getOriginal().getPersistentData(),
                 event.getEntity().getPersistentData()
         );
@@ -59,6 +67,7 @@ public class CultivationEvents {
 
         boolean zhenyuanChanged = CultivationManager.tickZhenyuan(player);
         CultivationManager.applyAttributes(player);
+        XinfaManager.applyAttributes(player);
         if (zhenyuanChanged) {
             CultivationManager.syncTo(player);
         }

@@ -2,7 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     "#eightwastelands:materials/monster_cores/foundation_building",
-    "#eightwastelands:materials/monster_cores/foundation_building"
+    "#eightwastelands:materials/spirit_herbs/foundation_building",
+    "minecraft:ender_eye"
   ],
   "result": {
     "id": "eightwastelands:foundation_building_breakthrough_pill_base",

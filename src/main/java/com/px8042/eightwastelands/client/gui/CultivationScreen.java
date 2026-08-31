@@ -5,6 +5,7 @@ import com.px8042.eightwastelands.cultivation.CultivationManager;
 import com.px8042.eightwastelands.cultivation.CultivationRealm;
 import com.px8042.eightwastelands.cultivation.CultivationSnapshot;
 import com.px8042.eightwastelands.cultivation.CultivationStage;
+import com.px8042.eightwastelands.client.ModKeyMappings;
 import com.px8042.eightwastelands.item.pill.AbstractBreakthroughPillItem;
 import com.px8042.eightwastelands.network.CultivationActionPayload;
 import io.github.naimjeg.damagenexus.registry.ModAttributes;
@@ -12,6 +13,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Inventory;
@@ -45,6 +47,7 @@ public class CultivationScreen extends Screen {
     private Page page = Page.TRAINING;
     private Button trainingTabButton;
     private Button attributesTabButton;
+    private Button xinfaButton;
     private Button primaryButton;
     private Button breakthroughButton;
     private int syncTicker;
@@ -75,6 +78,20 @@ public class CultivationScreen extends Screen {
                 )
                 .bounds(
                         this.leftPos + 22 + TAB_WIDTH + BUTTON_GAP,
+                        this.topPos + TAB_TOP_OFFSET,
+                        TAB_WIDTH,
+                        BUTTON_HEIGHT
+                )
+                .build());
+
+        this.xinfaButton = this.addRenderableWidget(Button.builder(
+                        Component.translatable("button.eightwastelands.cultivation.xinfa"),
+                        button -> ClientPacketDistributor.sendToServer(new CultivationActionPayload(
+                                CultivationActionPayload.ACTION_OPEN_XINFA_LIST
+                        ))
+                )
+                .bounds(
+                        this.leftPos + 22 + (TAB_WIDTH + BUTTON_GAP) * 2,
                         this.topPos + TAB_TOP_OFFSET,
                         TAB_WIDTH,
                         BUTTON_HEIGHT
@@ -135,6 +152,17 @@ public class CultivationScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public boolean keyPressed(KeyEvent keyEvent) {
+        if (this.minecraft != null && (this.minecraft.options.keyInventory.matches(keyEvent)
+                || ModKeyMappings.OPEN_CULTIVATION.matches(keyEvent))) {
+            this.onClose();
+            return true;
+        }
+
+        return super.keyPressed(keyEvent);
     }
 
     @Override
@@ -483,7 +511,7 @@ public class CultivationScreen extends Screen {
     }
 
     private void updateButtons() {
-        if (this.primaryButton == null || this.breakthroughButton == null) {
+        if (this.primaryButton == null || this.breakthroughButton == null || this.xinfaButton == null) {
             return;
         }
 
@@ -492,6 +520,8 @@ public class CultivationScreen extends Screen {
 
         this.trainingTabButton.active = this.page != Page.TRAINING;
         this.attributesTabButton.active = this.page != Page.ATTRIBUTES;
+        this.xinfaButton.visible = !stage.isMortal();
+        this.xinfaButton.active = this.xinfaButton.visible;
 
         this.primaryButton.setMessage(getPrimaryButtonText());
         this.primaryButton.visible = this.page == Page.TRAINING;

@@ -9,8 +9,10 @@ import net.minecraft.world.item.ItemStack;
 
 public record AlchemyFormula(
         Supplier<? extends Item> input,
+        AlchemyFormulaType type,
         CultivationRealm realm,
         int cookingTime,
+        double experienceMultiplier,
         Supplier<? extends Item> lowResult,
         Supplier<? extends Item> middleResult,
         Supplier<? extends Item> highResult,
@@ -19,12 +21,14 @@ public record AlchemyFormula(
 
     public AlchemyFormula {
         Objects.requireNonNull(input, "input");
+        Objects.requireNonNull(type, "type");
         Objects.requireNonNull(realm, "realm");
         Objects.requireNonNull(lowResult, "lowResult");
         Objects.requireNonNull(middleResult, "middleResult");
         Objects.requireNonNull(highResult, "highResult");
         Objects.requireNonNull(immortalResult, "immortalResult");
         cookingTime = Math.max(1, cookingTime);
+        experienceMultiplier = Math.max(0.0D, experienceMultiplier);
     }
 
     public boolean matches(ItemStack stack) {

@@ -50,6 +50,8 @@ public class ModCreativeModeTabs {
                                 output.accept(ModItems.FOUNDATION_BUILDING_PILL_BASE.get());
                                 output.accept(ModItems.QI_REFINING_BREAKTHROUGH_PILL_BASE.get());
                                 output.accept(ModItems.FOUNDATION_BUILDING_BREAKTHROUGH_PILL_BASE.get());
+                                output.accept(ModItems.WUDAO_SAND.get());
+                                output.accept(ModItems.QI_REFINING_MANUAL.get());
                                 output.accept(ModItems.LOW_GRADE_QI_REFINING_CULTIVATION_PILL.get());
                                 output.accept(ModItems.MIDDLE_GRADE_QI_REFINING_CULTIVATION_PILL.get());
                                 output.accept(ModItems.HIGH_GRADE_QI_REFINING_CULTIVATION_PILL.get());

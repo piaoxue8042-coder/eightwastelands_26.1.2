@@ -3,6 +3,7 @@ package com.px8042.eightwastelands;
 import com.px8042.eightwastelands.client.gui.AlchemyFurnaceScreen;
 import com.px8042.eightwastelands.client.gui.WealthTableScreen;
 import com.px8042.eightwastelands.client.CultivationClientEvents;
+import com.px8042.eightwastelands.client.ModKeyMappings;
 import com.px8042.eightwastelands.menu.ModMenuTypes;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -11,6 +12,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -40,5 +42,10 @@ public class EightWastelandsClient {
     static void registerMenuScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.WEALTH_TABLE.get(), WealthTableScreen::new);
         event.register(ModMenuTypes.ALCHEMY_FURNACE.get(), AlchemyFurnaceScreen::new);
+    }
+
+    @SubscribeEvent
+    static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        ModKeyMappings.register(event);
     }
 }

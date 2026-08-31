@@ -3,6 +3,7 @@ package com.px8042.eightwastelands.cultivation;
 import com.px8042.eightwastelands.alchemy.AlchemyManager;
 import com.px8042.eightwastelands.item.pill.AbstractBreakthroughPillItem;
 import com.px8042.eightwastelands.network.CultivationSyncPayload;
+import com.px8042.eightwastelands.xinfa.XinfaManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -58,6 +59,7 @@ public class CultivationManager {
         setZhenyuanToMax(player, CultivationStage.QI_REFINING_EARLY);
         resetBreakthroughFailureCount(player);
         applyAttributes(player);
+        XinfaManager.applyAttributes(player);
         syncTo(player);
         player.sendOverlayMessage(Component.translatable("message.eightwastelands.cultivation.induced_qi"));
     }
@@ -76,10 +78,11 @@ public class CultivationManager {
             return;
         }
 
+        int qiGain = getTunaiQiGain(player);
         setTunaiUsedToday(player, getTunaiUsedToday(player) + 1);
-        setQi(player, getQi(player) + TUNAI_QI_GAIN);
+        setQi(player, getQi(player) + qiGain);
         syncTo(player);
-        player.sendOverlayMessage(Component.translatable("message.eightwastelands.cultivation.tunai_gain", TUNAI_QI_GAIN));
+        player.sendOverlayMessage(Component.translatable("message.eightwastelands.cultivation.tunai_gain", qiGain));
     }
 
     public static void handleBreakthrough(ServerPlayer player) {
@@ -246,6 +249,7 @@ public class CultivationManager {
         setZhenyuanToMax(player, stage);
         resetBreakthroughFailureCount(player);
         applyAttributes(player);
+        XinfaManager.applyAttributes(player);
         syncTo(player);
     }
 
@@ -279,6 +283,7 @@ public class CultivationManager {
         data.remove(BREAKTHROUGH_COOLDOWN_END);
         data.remove(BREAKTHROUGH_FAILURE_COUNT);
         applyAttributes(player);
+        XinfaManager.applyAttributes(player);
         syncTo(player);
     }
 
@@ -305,6 +310,7 @@ public class CultivationManager {
             setZhenyuanToMax(player, nextStage);
             resetBreakthroughFailureCount(player);
             applyAttributes(player);
+            XinfaManager.applyAttributes(player);
             syncTo(player);
             player.sendOverlayMessage(Component.translatable(
                     "message.eightwastelands.cultivation.breakthrough_success",
@@ -452,12 +458,12 @@ public class CultivationManager {
         }
 
         int current = getZhenyuanScaled(player);
-        int max = getMaxZhenyuanScaled(stage);
+        int max = getMaxZhenyuanScaled(player);
         if (current >= max) {
             return false;
         }
 
-        int regen = toScaled(stage.getZhenyuanRegenPerSecond());
+        int regen = toScaled(getZhenyuanRegenPerSecond(player));
         if (regen <= 0) {
             return false;
         }
@@ -470,11 +476,11 @@ public class CultivationManager {
     }
 
     public static double getMaxZhenyuanAmount(ServerPlayer player) {
-        return getStage(player).getMaxZhenyuan();
+        return getStage(player).getMaxZhenyuan() + XinfaManager.getMaxZhenyuanBonus(player);
     }
 
     public static double getZhenyuanRegenPerSecond(ServerPlayer player) {
-        return getStage(player).getZhenyuanRegenPerSecond();
+        return getStage(player).getZhenyuanRegenPerSecond() + XinfaManager.getZhenyuanRegenBonus(player);
     }
 
     private static double consumeBreakthroughPillFromInventory(ServerPlayer player) {
@@ -537,7 +543,7 @@ public class CultivationManager {
     private static int getZhenyuanScaled(ServerPlayer player) {
         CompoundTag data = player.getPersistentData();
         CultivationStage stage = getStage(player);
-        int max = getMaxZhenyuanScaled(stage);
+        int max = getMaxZhenyuanScaled(player);
         if (max <= 0) {
             data.remove(ZHENYUAN);
             return 0;
@@ -558,7 +564,7 @@ public class CultivationManager {
     }
 
     private static void clampZhenyuan(ServerPlayer player, CultivationStage stage) {
-        int max = getMaxZhenyuanScaled(stage);
+        int max = getMaxZhenyuanScaled(player);
         if (max <= 0) {
             player.getPersistentData().remove(ZHENYUAN);
             return;
@@ -569,11 +575,11 @@ public class CultivationManager {
     }
 
     private static void setZhenyuanToMax(ServerPlayer player, CultivationStage stage) {
-        setZhenyuanScaled(player, getMaxZhenyuanScaled(stage));
+        setZhenyuanScaled(player, getMaxZhenyuanScaled(player));
     }
 
     private static boolean setZhenyuanScaled(ServerPlayer player, int zhenyuan) {
-        int clamped = Math.max(0, Math.min(zhenyuan, getMaxZhenyuanScaled(getStage(player))));
+        int clamped = Math.max(0, Math.min(zhenyuan, getMaxZhenyuanScaled(player)));
         int oldValue = player.getPersistentData().getIntOr(ZHENYUAN, 0);
         if (clamped <= 0) {
             player.getPersistentData().remove(ZHENYUAN);
@@ -584,8 +590,8 @@ public class CultivationManager {
         return oldValue != clamped;
     }
 
-    private static int getMaxZhenyuanScaled(CultivationStage stage) {
-        return toScaled(stage.getMaxZhenyuan());
+    private static int getMaxZhenyuanScaled(ServerPlayer player) {
+        return toScaled(getMaxZhenyuanAmount(player));
     }
 
     private static int toScaled(double value) {
@@ -606,7 +612,11 @@ public class CultivationManager {
 
     private static int getDailyTunaiUses(ServerPlayer player) {
         int extraUses = Math.max(0, player.getPersistentData().getIntOr(TUNAI_EXTRA_DAILY_USES, 0));
-        return BASE_TUNAI_DAILY_USES + extraUses;
+        return BASE_TUNAI_DAILY_USES + extraUses + XinfaManager.getTunaiDailyUsesBonus(player);
+    }
+
+    private static int getTunaiQiGain(ServerPlayer player) {
+        return TUNAI_QI_GAIN + XinfaManager.getTunaiQiGainBonus(player);
     }
 
     private static int getRemainingTunaiUses(ServerPlayer player) {

@@ -67,27 +67,8 @@ public final class CultivationMonsterManager {
         CultivationStage playerStage = nearestPlayer == null
                 ? CultivationStage.MORTAL
                 : CultivationManager.getStage(nearestPlayer);
-        double roll = monster.getRandom().nextDouble();
 
-        return switch (playerStage) {
-            case MORTAL -> CultivationStage.MORTAL;
-            case QI_REFINING_EARLY, QI_REFINING_MIDDLE ->
-                    roll < 0.80D ? CultivationStage.QI_REFINING_EARLY : CultivationStage.MORTAL;
-            case QI_REFINING_LATE -> {
-                if (roll < 0.05D) {
-                    yield CultivationStage.FOUNDATION_BUILDING_EARLY;
-                }
-
-                yield roll < 0.85D ? CultivationStage.QI_REFINING_EARLY : CultivationStage.MORTAL;
-            }
-            case FOUNDATION_BUILDING_EARLY, FOUNDATION_BUILDING_MIDDLE, FOUNDATION_BUILDING_LATE -> {
-                if (roll < 0.75D) {
-                    yield CultivationStage.FOUNDATION_BUILDING_EARLY;
-                }
-
-                yield roll < 0.95D ? CultivationStage.QI_REFINING_EARLY : CultivationStage.MORTAL;
-            }
-        };
+        return CultivationMonsterConfigTable.rollMonsterStage(playerStage, monster.getRandom());
     }
 
     private static ServerPlayer getNearestPlayer(Monster monster) {
@@ -101,29 +82,15 @@ public final class CultivationMonsterManager {
     }
 
     private static void applyStageAttributes(Monster monster, CultivationStage stage) {
-        if (stage.isMortal()) {
+        CultivationMonsterConfigTable.MonsterAttributes attributes =
+                CultivationMonsterConfigTable.getAttributes(stage);
+        if (attributes.isDefault()) {
             return;
         }
 
-        double maxHealthMultiplier = switch (stage) {
-            case QI_REFINING_EARLY, QI_REFINING_MIDDLE, QI_REFINING_LATE -> 1.50D;
-            case FOUNDATION_BUILDING_EARLY, FOUNDATION_BUILDING_MIDDLE, FOUNDATION_BUILDING_LATE -> 2.50D;
-            default -> 1.0D;
-        };
-        double attackMultiplier = switch (stage) {
-            case QI_REFINING_EARLY, QI_REFINING_MIDDLE, QI_REFINING_LATE -> 1.25D;
-            case FOUNDATION_BUILDING_EARLY, FOUNDATION_BUILDING_MIDDLE, FOUNDATION_BUILDING_LATE -> 1.75D;
-            default -> 1.0D;
-        };
-        double armorBonus = switch (stage) {
-            case QI_REFINING_EARLY, QI_REFINING_MIDDLE, QI_REFINING_LATE -> 2.0D;
-            case FOUNDATION_BUILDING_EARLY, FOUNDATION_BUILDING_MIDDLE, FOUNDATION_BUILDING_LATE -> 6.0D;
-            default -> 0.0D;
-        };
-
-        multiplyBaseValue(monster.getAttribute(Attributes.MAX_HEALTH), maxHealthMultiplier);
-        multiplyBaseValue(monster.getAttribute(Attributes.ATTACK_DAMAGE), attackMultiplier);
-        addBaseValue(monster.getAttribute(Attributes.ARMOR), armorBonus);
+        multiplyBaseValue(monster.getAttribute(Attributes.MAX_HEALTH), attributes.maxHealthMultiplier());
+        multiplyBaseValue(monster.getAttribute(Attributes.ATTACK_DAMAGE), attributes.attackDamageMultiplier());
+        addBaseValue(monster.getAttribute(Attributes.ARMOR), attributes.armorBonus());
 
         monster.setHealth(monster.getMaxHealth());
     }

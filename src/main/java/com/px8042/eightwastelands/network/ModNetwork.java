@@ -4,14 +4,17 @@ import com.px8042.eightwastelands.EightWastelands;
 import com.px8042.eightwastelands.cultivation.CultivationClientCache;
 import com.px8042.eightwastelands.cultivation.CultivationManager;
 import com.px8042.eightwastelands.cultivation.CultivationSnapshot;
+import com.px8042.eightwastelands.xinfa.XinfaManager;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class ModNetwork {
 
-    private static final String NETWORK_VERSION = "5";
+    private static final String NETWORK_VERSION = "8";
 
     private ModNetwork() {
     }
@@ -28,6 +31,26 @@ public class ModNetwork {
                 CultivationSyncPayload.TYPE,
                 CultivationSyncPayload.STREAM_CODEC,
                 ModNetwork::handleCultivationSync
+        );
+        registrar.playToServer(
+                XinfaActivatePayload.TYPE,
+                XinfaActivatePayload.STREAM_CODEC,
+                ModNetwork::handleXinfaActivate
+        );
+        registrar.playToServer(
+                XinfaOpenPayload.TYPE,
+                XinfaOpenPayload.STREAM_CODEC,
+                ModNetwork::handleXinfaOpen
+        );
+        registrar.playToClient(
+                XinfaSyncPayload.TYPE,
+                XinfaSyncPayload.STREAM_CODEC,
+                ModNetwork::handleXinfaSync
+        );
+        registrar.playToClient(
+                XinfaListSyncPayload.TYPE,
+                XinfaListSyncPayload.STREAM_CODEC,
+                ModNetwork::handleXinfaListSync
         );
     }
 
@@ -48,6 +71,11 @@ public class ModNetwork {
 
         if (payload.action() == CultivationActionPayload.ACTION_BREAKTHROUGH) {
             CultivationManager.handleBreakthrough(player);
+            return;
+        }
+
+        if (payload.action() == CultivationActionPayload.ACTION_OPEN_XINFA_LIST) {
+            XinfaManager.openXinfaList(player);
         }
     }
 
@@ -72,5 +100,29 @@ public class ModNetwork {
                 payload.alchemyExperience(),
                 payload.alchemyRequiredExperience()
         ));
+    }
+
+    private static void handleXinfaActivate(XinfaActivatePayload payload, IPayloadContext context) {
+        if (context.player() instanceof ServerPlayer player) {
+            XinfaManager.handleActivateNode(player, payload.xinfaId(), payload.nodeId());
+        }
+    }
+
+    private static void handleXinfaOpen(XinfaOpenPayload payload, IPayloadContext context) {
+        if (context.player() instanceof ServerPlayer player) {
+            XinfaManager.openXinfa(player, payload.xinfaId());
+        }
+    }
+
+    private static void handleXinfaSync(XinfaSyncPayload payload, IPayloadContext context) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
+            com.px8042.eightwastelands.client.XinfaClientPacketHandler.handleSync(payload);
+        }
+    }
+
+    private static void handleXinfaListSync(XinfaListSyncPayload payload, IPayloadContext context) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
+            com.px8042.eightwastelands.client.XinfaClientPacketHandler.handleListSync(payload);
+        }
     }
 }

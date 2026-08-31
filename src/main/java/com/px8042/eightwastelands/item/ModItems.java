@@ -13,6 +13,7 @@ import com.px8042.eightwastelands.item.pill.HealingPillItem;
 import com.px8042.eightwastelands.item.pill.PillData;
 import com.px8042.eightwastelands.item.pill.PillGrade;
 import com.px8042.eightwastelands.item.pill.QiRefiningCultivationPillItem;
+import com.px8042.eightwastelands.item.xinfa.QiRefiningManualItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -160,15 +161,17 @@ public class ModItems {
 
     public static final DeferredItem<Item> ALCHEMY_FURNACE =
             ITEMS.register("alchemy_furnace",
-                    () -> new BlockItem(
+                    () -> new AlchemyFurnaceBlockItem(
                             ModBlocks.ALCHEMY_FURNACE.get(),
+                            CultivationRealm.QI_REFINING,
                             itemProperties("alchemy_furnace").useBlockDescriptionPrefix()
                     ));
 
     public static final DeferredItem<Item> FOUNDATION_BUILDING_ALCHEMY_FURNACE =
             ITEMS.register("foundation_building_alchemy_furnace",
-                    () -> new BlockItem(
+                    () -> new AlchemyFurnaceBlockItem(
                             ModBlocks.FOUNDATION_BUILDING_ALCHEMY_FURNACE.get(),
+                            CultivationRealm.FOUNDATION_BUILDING,
                             itemProperties("foundation_building_alchemy_furnace").useBlockDescriptionPrefix()
                     ));
     
@@ -211,6 +214,14 @@ public class ModItems {
             registerMaterial("qi_refining_breakthrough_pill_base");
     public static final DeferredItem<Item> FOUNDATION_BUILDING_BREAKTHROUGH_PILL_BASE =
             registerMaterial("foundation_building_breakthrough_pill_base");
+    public static final DeferredItem<Item> WUDAO_SAND =
+            registerMaterial("wudao_sand");
+
+    public static final DeferredItem<Item> QI_REFINING_MANUAL =
+            ITEMS.register("qi_refining_manual",
+                    () -> new QiRefiningManualItem(
+                            itemProperties("qi_refining_manual").stacksTo(1)
+                    ));
 
     public static final DeferredItem<Item> CULTIVATION_PILL =
             ITEMS.register("cultivation_pill",
