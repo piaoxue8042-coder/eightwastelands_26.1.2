@@ -14,7 +14,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class ModNetwork {
 
-    private static final String NETWORK_VERSION = "8";
+    private static final String NETWORK_VERSION = "10";
 
     private ModNetwork() {
     }
@@ -92,13 +92,18 @@ public class ModNetwork {
                 payload.zhenyuanRegenPerSecond(),
                 payload.health(),
                 payload.maxHealth(),
+                payload.healthRegenPerSecond(),
                 payload.attackDamage(),
                 payload.attackSpeed(),
                 payload.movementSpeed(),
                 payload.alchemyRealmIndex(),
                 payload.alchemyMasteryIndex(),
                 payload.alchemyExperience(),
-                payload.alchemyRequiredExperience()
+                payload.alchemyRequiredExperience(),
+                payload.refiningRealmIndex(),
+                payload.refiningMasteryIndex(),
+                payload.refiningExperience(),
+                payload.refiningRequiredExperience()
         ));
     }
 

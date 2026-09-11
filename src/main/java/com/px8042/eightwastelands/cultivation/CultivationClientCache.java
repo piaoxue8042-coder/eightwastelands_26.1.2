@@ -14,9 +14,14 @@ public class CultivationClientCache {
             0.0D,
             20.0D,
             20.0D,
+            0.0D,
             1.0D,
             4.0D,
             0.10D,
+            CultivationRealm.QI_REFINING.getIndex(),
+            0,
+            0,
+            100,
             CultivationRealm.QI_REFINING.getIndex(),
             0,
             0,
@@ -51,13 +56,18 @@ public class CultivationClientCache {
                 snapshot.zhenyuanRegenPerSecond(),
                 snapshot.health(),
                 snapshot.maxHealth(),
+                snapshot.healthRegenPerSecond(),
                 snapshot.attackDamage(),
                 snapshot.attackSpeed(),
                 snapshot.movementSpeed(),
                 snapshot.alchemyRealmIndex(),
                 snapshot.alchemyMasteryIndex(),
                 snapshot.alchemyExperience(),
-                snapshot.alchemyRequiredExperience()
+                snapshot.alchemyRequiredExperience(),
+                snapshot.refiningRealmIndex(),
+                snapshot.refiningMasteryIndex(),
+                snapshot.refiningExperience(),
+                snapshot.refiningRequiredExperience()
         );
     }
 }

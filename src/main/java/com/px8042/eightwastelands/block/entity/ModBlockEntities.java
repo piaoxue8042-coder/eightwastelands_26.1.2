@@ -24,6 +24,16 @@ public class ModBlockEntities {
                     )
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RefiningFurnaceBlockEntity>>
+            REFINING_FURNACE =
+            BLOCK_ENTITY_TYPES.register(
+                    "refining_furnace",
+                    () -> new BlockEntityType<>(
+                            RefiningFurnaceBlockEntity::new,
+                            ModBlocks.REFINING_FURNACE.get()
+                    )
+            );
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITY_TYPES.register(eventBus);
     }

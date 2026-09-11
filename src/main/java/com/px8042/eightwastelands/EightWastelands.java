@@ -5,6 +5,7 @@ import com.px8042.eightwastelands.command.CultivationCommands;
 import com.px8042.eightwastelands.compat.damagenexus.DamageNexusBridge;
 import com.px8042.eightwastelands.event.CultivationCombatEvents;
 import com.px8042.eightwastelands.event.CultivationEvents;
+import com.px8042.eightwastelands.event.CultivationGearEvents;
 import com.px8042.eightwastelands.event.CultivationMonsterEvents;
 import com.px8042.eightwastelands.event.FabaoCurioEvents;
 import com.px8042.eightwastelands.event.ModEvents;
@@ -61,6 +62,7 @@ public class EightWastelands {
         NeoForge.EVENT_BUS.register(new FabaoCurioEvents());
         NeoForge.EVENT_BUS.register(new ModNegativeEffectEvents());
         NeoForge.EVENT_BUS.register(new CultivationEvents());
+        NeoForge.EVENT_BUS.register(new CultivationGearEvents());
         NeoForge.EVENT_BUS.register(new CultivationCombatEvents());
         NeoForge.EVENT_BUS.register(new CultivationMonsterEvents());
         NeoForge.EVENT_BUS.register(new CultivationCommands());

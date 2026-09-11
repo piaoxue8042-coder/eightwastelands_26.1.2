@@ -18,13 +18,18 @@ public record CultivationSyncPayload(
         double zhenyuanRegenPerSecond,
         double health,
         double maxHealth,
+        double healthRegenPerSecond,
         double attackDamage,
         double attackSpeed,
         double movementSpeed,
         int alchemyRealmIndex,
         int alchemyMasteryIndex,
         int alchemyExperience,
-        int alchemyRequiredExperience
+        int alchemyRequiredExperience,
+        int refiningRealmIndex,
+        int refiningMasteryIndex,
+        int refiningExperience,
+        int refiningRequiredExperience
 ) implements CustomPacketPayload {
 
     public static final Type<CultivationSyncPayload> TYPE = new Type<>(
@@ -50,6 +55,11 @@ public record CultivationSyncPayload(
                             buffer.readDouble(),
                             buffer.readDouble(),
                             buffer.readDouble(),
+                            buffer.readDouble(),
+                            buffer.readInt(),
+                            buffer.readInt(),
+                            buffer.readInt(),
+                            buffer.readInt(),
                             buffer.readInt(),
                             buffer.readInt(),
                             buffer.readInt(),
@@ -70,6 +80,7 @@ public record CultivationSyncPayload(
                     buffer.writeDouble(payload.zhenyuanRegenPerSecond());
                     buffer.writeDouble(payload.health());
                     buffer.writeDouble(payload.maxHealth());
+                    buffer.writeDouble(payload.healthRegenPerSecond());
                     buffer.writeDouble(payload.attackDamage());
                     buffer.writeDouble(payload.attackSpeed());
                     buffer.writeDouble(payload.movementSpeed());
@@ -77,6 +88,10 @@ public record CultivationSyncPayload(
                     buffer.writeInt(payload.alchemyMasteryIndex());
                     buffer.writeInt(payload.alchemyExperience());
                     buffer.writeInt(payload.alchemyRequiredExperience());
+                    buffer.writeInt(payload.refiningRealmIndex());
+                    buffer.writeInt(payload.refiningMasteryIndex());
+                    buffer.writeInt(payload.refiningExperience());
+                    buffer.writeInt(payload.refiningRequiredExperience());
                 }
             };
 

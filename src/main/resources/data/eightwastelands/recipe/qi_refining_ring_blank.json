@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": ["minecraft:iron_nugget", "minecraft:iron_nugget", "minecraft:iron_nugget", "minecraft:iron_nugget", "#eightwastelands:materials/monster_cores/qi_refining", "#eightwastelands:materials/spirit_herbs/qi_refining"],
+  "result": {"id": "eightwastelands:qi_refining_ring_blank", "count": 1}
+}

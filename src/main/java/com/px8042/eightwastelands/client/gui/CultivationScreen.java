@@ -240,6 +240,16 @@ public class CultivationScreen extends Screen {
                 snapshot.alchemyExperience(),
                 snapshot.alchemyRequiredExperience()
         ));
+        lines.add(Component.translatable(
+                "screen.eightwastelands.cultivation.refining_level",
+                snapshot.refiningRealm().getDisplayName(),
+                snapshot.refiningMastery().getDisplayName()
+        ));
+        lines.add(Component.translatable(
+                "screen.eightwastelands.cultivation.refining_experience",
+                snapshot.refiningExperience(),
+                snapshot.refiningRequiredExperience()
+        ));
         renderScrollableLines(graphics, contentTop, lines);
     }
 
@@ -316,7 +326,7 @@ public class CultivationScreen extends Screen {
         ));
         lines.add(Component.translatable(
                 "screen.eightwastelands.cultivation.attribute_health_regen",
-                Component.translatable("screen.eightwastelands.cultivation.attribute_health_regen_vanilla")
+                formatFixed(snapshot.healthRegenPerSecond(), 2)
         ));
         lines.add(Component.translatable(
                 "screen.eightwastelands.cultivation.attribute_zhenyuan",

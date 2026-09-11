@@ -1,6 +1,7 @@
 package com.px8042.eightwastelands.cultivation;
 
 import com.px8042.eightwastelands.alchemy.AlchemyMastery;
+import com.px8042.eightwastelands.refining.RefiningMastery;
 
 public record CultivationSnapshot(
         int stageIndex,
@@ -14,13 +15,18 @@ public record CultivationSnapshot(
         double zhenyuanRegenPerSecond,
         double health,
         double maxHealth,
+        double healthRegenPerSecond,
         double attackDamage,
         double attackSpeed,
         double movementSpeed,
         int alchemyRealmIndex,
         int alchemyMasteryIndex,
         int alchemyExperience,
-        int alchemyRequiredExperience
+        int alchemyRequiredExperience,
+        int refiningRealmIndex,
+        int refiningMasteryIndex,
+        int refiningExperience,
+        int refiningRequiredExperience
 ) {
     public CultivationStage stage() {
         return CultivationStage.byIndex(this.stageIndex);
@@ -34,6 +40,16 @@ public record CultivationSnapshot(
     public AlchemyMastery alchemyMastery() {
         return AlchemyMastery.byIndex(this.alchemyMasteryIndex)
                 .orElse(AlchemyMastery.BEGINNER);
+    }
+
+    public CultivationRealm refiningRealm() {
+        return CultivationRealm.byIndex(this.refiningRealmIndex)
+                .orElse(CultivationRealm.QI_REFINING);
+    }
+
+    public RefiningMastery refiningMastery() {
+        return RefiningMastery.byIndex(this.refiningMasteryIndex)
+                .orElse(RefiningMastery.BEGINNER);
     }
 
     public int requiredQi() {

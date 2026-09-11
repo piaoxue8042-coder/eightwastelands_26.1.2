@@ -22,6 +22,16 @@ public final class ModRecipeSerializers {
                     )
             );
 
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<StorageBagUpgradeRecipe>>
+            STORAGE_BAG_UPGRADE =
+            RECIPE_SERIALIZERS.register(
+                    "storage_bag_upgrade",
+                    () -> new RecipeSerializer<>(
+                            StorageBagUpgradeRecipe.MAP_CODEC,
+                            StorageBagUpgradeRecipe.STREAM_CODEC
+                    )
+            );
+
     private ModRecipeSerializers() {
     }
 

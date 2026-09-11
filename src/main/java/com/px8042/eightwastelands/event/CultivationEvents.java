@@ -2,6 +2,8 @@ package com.px8042.eightwastelands.event;
 
 import com.px8042.eightwastelands.alchemy.AlchemyManager;
 import com.px8042.eightwastelands.cultivation.CultivationManager;
+import com.px8042.eightwastelands.item.cultivation.CultivationGearManager;
+import com.px8042.eightwastelands.refining.RefiningManager;
 import com.px8042.eightwastelands.xinfa.XinfaManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -15,27 +17,28 @@ public class CultivationEvents {
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            CultivationManager.applyAttributes(player);
-            XinfaManager.applyAttributes(player);
-            CultivationManager.syncTo(player);
+            CultivationManager.refreshPlayerState(player, true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            CultivationManager.saveCurrentHealth(player);
         }
     }
 
     @SubscribeEvent
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            CultivationManager.applyAttributes(player);
-            XinfaManager.applyAttributes(player);
-            CultivationManager.syncTo(player);
+            CultivationManager.refreshPlayerState(player);
         }
     }
 
     @SubscribeEvent
     public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            CultivationManager.applyAttributes(player);
-            XinfaManager.applyAttributes(player);
-            CultivationManager.syncTo(player);
+            CultivationManager.refreshPlayerState(player);
         }
     }
 
@@ -46,6 +49,10 @@ public class CultivationEvents {
                 event.getEntity().getPersistentData()
         );
         AlchemyManager.copyData(
+                event.getOriginal().getPersistentData(),
+                event.getEntity().getPersistentData()
+        );
+        RefiningManager.copyData(
                 event.getOriginal().getPersistentData(),
                 event.getEntity().getPersistentData()
         );
@@ -65,9 +72,13 @@ public class CultivationEvents {
             return;
         }
 
+        CultivationGearManager.initializeGearInstances(player);
         boolean zhenyuanChanged = CultivationManager.tickZhenyuan(player);
+        CultivationManager.maintainCultivationFood(player);
         CultivationManager.applyAttributes(player);
         XinfaManager.applyAttributes(player);
+        CultivationGearManager.applyAttributes(player);
+        CultivationGearManager.applyHealthRegeneration(player);
         if (zhenyuanChanged) {
             CultivationManager.syncTo(player);
         }

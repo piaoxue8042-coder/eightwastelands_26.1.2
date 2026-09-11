@@ -18,7 +18,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
@@ -49,6 +51,18 @@ public class CultivationClientEvents {
             if (minecraft.player != null && minecraft.level != null && minecraft.screen == null) {
                 openCultivationScreen();
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderGuiLayer(RenderGuiLayerEvent.Pre event) {
+        if (!CultivationHudOverlay.shouldUseCultivationHud()) {
+            return;
+        }
+
+        if (event.getName().equals(VanillaGuiLayers.PLAYER_HEALTH)
+                || event.getName().equals(VanillaGuiLayers.FOOD_LEVEL)) {
+            event.setCanceled(true);
         }
     }
 

@@ -4,6 +4,13 @@ import com.px8042.eightwastelands.EightWastelands;
 import com.px8042.eightwastelands.block.ModBlocks;
 import com.px8042.eightwastelands.cultivation.CultivationRealm;
 import com.px8042.eightwastelands.item.custom.*;
+import com.px8042.eightwastelands.item.cultivation.CultivationArmorItem;
+import com.px8042.eightwastelands.item.cultivation.CultivationFabaoItem;
+import com.px8042.eightwastelands.item.cultivation.CultivationGearGrade;
+import com.px8042.eightwastelands.item.cultivation.CultivationGearSlot;
+import com.px8042.eightwastelands.item.cultivation.CultivationOffhandItem;
+import com.px8042.eightwastelands.item.cultivation.CultivationSwordItem;
+import com.px8042.eightwastelands.item.cultivation.RefiningBlankItem;
 import com.px8042.eightwastelands.item.fabao.*;
 import com.px8042.eightwastelands.item.material.ModMaterialItem;
 import com.px8042.eightwastelands.item.pill.BreakthroughPillItem;
@@ -13,6 +20,8 @@ import com.px8042.eightwastelands.item.pill.HealingPillItem;
 import com.px8042.eightwastelands.item.pill.PillData;
 import com.px8042.eightwastelands.item.pill.PillGrade;
 import com.px8042.eightwastelands.item.pill.QiRefiningCultivationPillItem;
+import com.px8042.eightwastelands.item.storage.StorageBagItem;
+import com.px8042.eightwastelands.item.storage.StorageBagTier;
 import com.px8042.eightwastelands.item.xinfa.BodyTemperingManualItem;
 import com.px8042.eightwastelands.item.xinfa.QiRefiningManualItem;
 import net.minecraft.core.registries.Registries;
@@ -20,6 +29,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterials;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -43,6 +55,13 @@ public class ModItems {
 
     private static DeferredItem<Item> registerMaterial(String name) {
         return ITEMS.register(name, () -> new ModMaterialItem(itemProperties(name)));
+    }
+
+    private static DeferredItem<Item> registerRefiningBlank(String name) {
+        return ITEMS.register(name, () -> new RefiningBlankItem(
+                CultivationRealm.QI_REFINING,
+                itemProperties(name).stacksTo(16)
+        ));
     }
 
 
@@ -175,6 +194,27 @@ public class ModItems {
                             CultivationRealm.FOUNDATION_BUILDING,
                             itemProperties("foundation_building_alchemy_furnace").useBlockDescriptionPrefix()
                     ));
+
+    public static final DeferredItem<Item> REFINING_FURNACE =
+            ITEMS.register("refining_furnace",
+                    () -> new BlockItem(
+                            ModBlocks.REFINING_FURNACE.get(),
+                            itemProperties("refining_furnace").useBlockDescriptionPrefix()
+                    ));
+
+    public static final DeferredItem<Item> QI_REFINING_STORAGE_BAG =
+            ITEMS.register("qi_refining_storage_bag",
+                    () -> new StorageBagItem(
+                            StorageBagTier.QI_REFINING,
+                            itemProperties("qi_refining_storage_bag").stacksTo(1)
+                    ));
+
+    public static final DeferredItem<Item> FOUNDATION_BUILDING_STORAGE_BAG =
+            ITEMS.register("foundation_building_storage_bag",
+                    () -> new StorageBagItem(
+                            StorageBagTier.FOUNDATION_BUILDING,
+                            itemProperties("foundation_building_storage_bag").stacksTo(1)
+                    ));
     
     public static final DeferredItem<Item> FENGXING_BOOTS =
             ITEMS.register("fengxing_boots",
@@ -217,6 +257,97 @@ public class ModItems {
             registerMaterial("foundation_building_breakthrough_pill_base");
     public static final DeferredItem<Item> WUDAO_SAND =
             registerMaterial("wudao_sand");
+    public static final DeferredItem<Item> QI_REFINING_SWORD_BLANK = registerRefiningBlank("qi_refining_sword_blank");
+    public static final DeferredItem<Item> QI_REFINING_RING_BLANK = registerRefiningBlank("qi_refining_ring_blank");
+    public static final DeferredItem<Item> QI_REFINING_HELMET_BLANK = registerRefiningBlank("qi_refining_helmet_blank");
+    public static final DeferredItem<Item> QI_REFINING_CHESTPLATE_BLANK = registerRefiningBlank("qi_refining_chestplate_blank");
+    public static final DeferredItem<Item> QI_REFINING_ROBE_BLANK = registerRefiningBlank("qi_refining_robe_blank");
+    public static final DeferredItem<Item> QI_REFINING_LEGGINGS_BLANK = registerRefiningBlank("qi_refining_leggings_blank");
+    public static final DeferredItem<Item> QI_REFINING_BOOTS_BLANK = registerRefiningBlank("qi_refining_boots_blank");
+    public static final DeferredItem<Item> QI_REFINING_LONG_SWORD_FABAO_BLANK =
+            registerRefiningBlank("qi_refining_long_sword_fabao_blank");
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_SWORD =
+            ITEMS.register("low_grade_qi_refining_sword",
+                    () -> new CultivationSwordItem(
+                            ToolMaterial.IRON,
+                            3.0F,
+                            -2.4F,
+                            CultivationRealm.QI_REFINING,
+                            CultivationGearGrade.LOW,
+                            itemProperties("low_grade_qi_refining_sword")
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_RING =
+            ITEMS.register("low_grade_qi_refining_ring",
+                    () -> new CultivationOffhandItem(
+                            CultivationRealm.QI_REFINING,
+                            CultivationGearGrade.LOW,
+                            itemProperties("low_grade_qi_refining_ring").stacksTo(1)
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_HELMET =
+            ITEMS.register("low_grade_qi_refining_helmet",
+                    () -> new CultivationArmorItem(
+                            ArmorMaterials.IRON,
+                            ArmorType.HELMET,
+                            CultivationRealm.QI_REFINING,
+                            CultivationGearGrade.LOW,
+                            CultivationGearSlot.HELMET,
+                            itemProperties("low_grade_qi_refining_helmet")
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_CHESTPLATE =
+            ITEMS.register("low_grade_qi_refining_chestplate",
+                    () -> new CultivationArmorItem(
+                            ArmorMaterials.IRON,
+                            ArmorType.CHESTPLATE,
+                            CultivationRealm.QI_REFINING,
+                            CultivationGearGrade.LOW,
+                            CultivationGearSlot.CHEST_ARMOR,
+                            itemProperties("low_grade_qi_refining_chestplate")
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_ROBE =
+            ITEMS.register("low_grade_qi_refining_robe",
+                    () -> new CultivationArmorItem(
+                            ArmorMaterials.IRON,
+                            ArmorType.CHESTPLATE,
+                            CultivationRealm.QI_REFINING,
+                            CultivationGearGrade.LOW,
+                            CultivationGearSlot.CHEST_ROBE,
+                            itemProperties("low_grade_qi_refining_robe")
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_LEGGINGS =
+            ITEMS.register("low_grade_qi_refining_leggings",
+                    () -> new CultivationArmorItem(
+                            ArmorMaterials.IRON,
+                            ArmorType.LEGGINGS,
+                            CultivationRealm.QI_REFINING,
+                            CultivationGearGrade.LOW,
+                            CultivationGearSlot.LEGGINGS,
+                            itemProperties("low_grade_qi_refining_leggings")
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_BOOTS =
+            ITEMS.register("low_grade_qi_refining_boots",
+                    () -> new CultivationArmorItem(
+                            ArmorMaterials.IRON,
+                            ArmorType.BOOTS,
+                            CultivationRealm.QI_REFINING,
+                            CultivationGearGrade.LOW,
+                            CultivationGearSlot.BOOTS,
+                            itemProperties("low_grade_qi_refining_boots")
+                    ));
+
+    public static final DeferredItem<Item> LOW_GRADE_QI_REFINING_LONG_SWORD_FABAO =
+            ITEMS.register("low_grade_qi_refining_long_sword_fabao",
+                    () -> new CultivationFabaoItem(
+                            CultivationRealm.QI_REFINING,
+                            CultivationGearGrade.LOW,
+                            itemProperties("low_grade_qi_refining_long_sword_fabao").stacksTo(1)
+                    ));
 
     public static final DeferredItem<Item> QI_REFINING_MANUAL =
             ITEMS.register("qi_refining_manual",

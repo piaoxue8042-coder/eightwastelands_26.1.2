@@ -2,7 +2,9 @@ package com.px8042.eightwastelands.cultivation;
 
 import com.px8042.eightwastelands.alchemy.AlchemyManager;
 import com.px8042.eightwastelands.item.pill.AbstractBreakthroughPillItem;
+import com.px8042.eightwastelands.item.cultivation.CultivationGearManager;
 import com.px8042.eightwastelands.network.CultivationSyncPayload;
+import com.px8042.eightwastelands.refining.RefiningManager;
 import com.px8042.eightwastelands.xinfa.XinfaManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -34,6 +36,7 @@ public class CultivationManager {
     public static final String TUNAI_EXTRA_DAILY_USES = "eightwastelands_tunai_extra_daily_uses";
     public static final String BREAKTHROUGH_COOLDOWN_END = "eightwastelands_breakthrough_cooldown_end";
     public static final String BREAKTHROUGH_FAILURE_COUNT = "eightwastelands_breakthrough_failure_count";
+    private static final String SAVED_HEALTH = "eightwastelands_saved_health";
 
     private CultivationManager() {
     }
@@ -60,6 +63,7 @@ public class CultivationManager {
         resetBreakthroughFailureCount(player);
         applyAttributes(player);
         XinfaManager.applyAttributes(player);
+        CultivationGearManager.applyAttributes(player);
         syncTo(player);
         player.sendOverlayMessage(Component.translatable("message.eightwastelands.cultivation.induced_qi"));
     }
@@ -179,13 +183,18 @@ public class CultivationManager {
                 getZhenyuanRegenPerSecond(player),
                 player.getHealth(),
                 player.getMaxHealth(),
+                CultivationGearManager.getHealthRegenPerSecond(player),
                 player.getAttributeValue(Attributes.ATTACK_DAMAGE),
                 player.getAttributeValue(Attributes.ATTACK_SPEED),
                 player.getAttributeValue(Attributes.MOVEMENT_SPEED),
                 AlchemyManager.getRealm(player).getIndex(),
                 AlchemyManager.getMastery(player).getIndex(),
                 AlchemyManager.getExperience(player),
-                AlchemyManager.getRequiredExperience(player)
+                AlchemyManager.getRequiredExperience(player),
+                RefiningManager.getRealm(player).getIndex(),
+                RefiningManager.getMastery(player).getIndex(),
+                RefiningManager.getExperience(player),
+                RefiningManager.getRequiredExperience(player)
         );
     }
 
@@ -203,14 +212,63 @@ public class CultivationManager {
                 snapshot.zhenyuanRegenPerSecond(),
                 snapshot.health(),
                 snapshot.maxHealth(),
+                snapshot.healthRegenPerSecond(),
                 snapshot.attackDamage(),
                 snapshot.attackSpeed(),
                 snapshot.movementSpeed(),
                 snapshot.alchemyRealmIndex(),
                 snapshot.alchemyMasteryIndex(),
                 snapshot.alchemyExperience(),
-                snapshot.alchemyRequiredExperience()
+                snapshot.alchemyRequiredExperience(),
+                snapshot.refiningRealmIndex(),
+                snapshot.refiningMasteryIndex(),
+                snapshot.refiningExperience(),
+                snapshot.refiningRequiredExperience()
         ));
+    }
+
+    public static void refreshPlayerState(ServerPlayer player) {
+        refreshPlayerState(player, false);
+    }
+
+    public static void refreshPlayerState(ServerPlayer player, boolean restoreSavedHealth) {
+        refreshDailyTunai(player);
+        CultivationGearManager.initializeGearInstances(player);
+        applyAttributes(player);
+        XinfaManager.applyAttributes(player);
+        CultivationGearManager.applyAttributes(player);
+        maintainCultivationFood(player);
+        if (restoreSavedHealth) {
+            restoreSavedHealth(player);
+        }
+
+        syncTo(player);
+    }
+
+    public static void saveCurrentHealth(ServerPlayer player) {
+        CompoundTag data = player.getPersistentData();
+        float health = player.getHealth();
+        if (health <= 0.0F || !player.isAlive()) {
+            data.remove(SAVED_HEALTH);
+            return;
+        }
+
+        data.putFloat(SAVED_HEALTH, health);
+    }
+
+    public static void maintainCultivationFood(ServerPlayer player) {
+        if (getStage(player).isMortal()) {
+            return;
+        }
+
+        var foodData = player.getFoodData();
+        if (foodData.getFoodLevel() < 20) {
+            foodData.setFoodLevel(20);
+        }
+
+        if (foodData.getSaturationLevel() < 5.0F) {
+            foodData.setSaturation(5.0F);
+        }
     }
 
     public static void applyAttributes(ServerPlayer player) {
@@ -250,6 +308,7 @@ public class CultivationManager {
         resetBreakthroughFailureCount(player);
         applyAttributes(player);
         XinfaManager.applyAttributes(player);
+        CultivationGearManager.applyAttributes(player);
         syncTo(player);
     }
 
@@ -284,6 +343,7 @@ public class CultivationManager {
         data.remove(BREAKTHROUGH_FAILURE_COUNT);
         applyAttributes(player);
         XinfaManager.applyAttributes(player);
+        CultivationGearManager.applyAttributes(player);
         syncTo(player);
     }
 
@@ -311,6 +371,7 @@ public class CultivationManager {
             resetBreakthroughFailureCount(player);
             applyAttributes(player);
             XinfaManager.applyAttributes(player);
+            CultivationGearManager.applyAttributes(player);
             syncTo(player);
             player.sendOverlayMessage(Component.translatable(
                     "message.eightwastelands.cultivation.breakthrough_success",
@@ -476,11 +537,15 @@ public class CultivationManager {
     }
 
     public static double getMaxZhenyuanAmount(ServerPlayer player) {
-        return getStage(player).getMaxZhenyuan() + XinfaManager.getMaxZhenyuanBonus(player);
+        return getStage(player).getMaxZhenyuan()
+                + XinfaManager.getMaxZhenyuanBonus(player)
+                + CultivationGearManager.getMaxZhenyuanBonus(player);
     }
 
     public static double getZhenyuanRegenPerSecond(ServerPlayer player) {
-        return getStage(player).getZhenyuanRegenPerSecond() + XinfaManager.getZhenyuanRegenBonus(player);
+        return getStage(player).getZhenyuanRegenPerSecond()
+                + XinfaManager.getZhenyuanRegenBonus(player)
+                + CultivationGearManager.getZhenyuanRegenBonus(player);
     }
 
     private static double consumeBreakthroughPillFromInventory(ServerPlayer player) {
@@ -692,5 +757,20 @@ public class CultivationManager {
         if (oldData.contains(key)) {
             newData.putLong(key, oldData.getLongOr(key, 0L));
         }
+    }
+
+    private static void restoreSavedHealth(ServerPlayer player) {
+        CompoundTag data = player.getPersistentData();
+        if (!data.contains(SAVED_HEALTH)) {
+            return;
+        }
+
+        float savedHealth = data.getFloatOr(SAVED_HEALTH, player.getHealth());
+        data.remove(SAVED_HEALTH);
+        if (savedHealth <= 0.0F || !player.isAlive()) {
+            return;
+        }
+
+        player.setHealth(Math.min(savedHealth, player.getMaxHealth()));
     }
 }

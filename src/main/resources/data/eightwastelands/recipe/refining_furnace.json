@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["ICI", "IFI", "III"],
+  "key": {"I": "minecraft:iron_ingot", "C": "eightwastelands:qi_refining_monster_core", "F": "minecraft:furnace"},
+  "result": {"id": "eightwastelands:refining_furnace", "count": 1}
+}

@@ -19,6 +19,9 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<AlchemyFurnaceMenu>> ALCHEMY_FURNACE =
             MENU_TYPES.register("alchemy_furnace", () -> IMenuTypeExtension.create(AlchemyFurnaceMenu::fromNetwork));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<RefiningFurnaceMenu>> REFINING_FURNACE =
+            MENU_TYPES.register("refining_furnace", () -> IMenuTypeExtension.create(RefiningFurnaceMenu::fromNetwork));
+
     public static void register(IEventBus eventBus) {
         MENU_TYPES.register(eventBus);
     }

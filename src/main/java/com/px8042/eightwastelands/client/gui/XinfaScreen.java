@@ -2,15 +2,14 @@ package com.px8042.eightwastelands.client.gui;
 
 import com.px8042.eightwastelands.network.XinfaActivatePayload;
 import com.px8042.eightwastelands.client.ModKeyMappings;
-import com.px8042.eightwastelands.xinfa.XinfaBonus;
 import com.px8042.eightwastelands.xinfa.XinfaClientCache;
 import com.px8042.eightwastelands.xinfa.XinfaDefinition;
 import com.px8042.eightwastelands.xinfa.XinfaDefinitions;
 import com.px8042.eightwastelands.xinfa.XinfaNode;
-import com.px8042.eightwastelands.xinfa.XinfaSpecialAttribute;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
@@ -132,13 +131,6 @@ public class XinfaScreen extends Screen {
                     this.topPos + node.y() + NODE_HEIGHT + 8,
                     titleColor
             );
-            graphics.centeredText(
-                    this.font,
-                    buildBonusText(node),
-                    centerX,
-                    this.topPos + node.y() + NODE_HEIGHT + 22,
-                    SUBTLE_TEXT_COLOR
-            );
         }
 
         graphics.centeredText(
@@ -160,6 +152,7 @@ public class XinfaScreen extends Screen {
                             pressed -> ClientPacketDistributor.sendToServer(new XinfaActivatePayload(this.xinfaId, node.id()))
                     )
                     .bounds(this.leftPos + node.x(), this.topPos + node.y(), NODE_WIDTH, NODE_HEIGHT)
+                    .tooltip(Tooltip.create(buildNodeTooltip(node)))
                     .build());
             this.nodeButtons.put(node.id(), button);
         }
@@ -286,36 +279,42 @@ public class XinfaScreen extends Screen {
         return LOCKED_COLOR;
     }
 
-    private Component buildBonusText(XinfaNode node) {
-        if (node.bonuses().isEmpty()) {
-            return Component.empty();
-        }
+    private Component buildNodeTooltip(XinfaNode node) {
+        Set<String> activatedNodeIds = getActivatedNodeIds();
+        int wudaoSandCount = XinfaClientCache.getWudaoSandCount();
 
-        MutableComponent result = Component.empty();
-        for (int index = 0; index < node.bonuses().size(); index++) {
-            if (index > 0) {
-                result.append(Component.literal(", "));
+        MutableComponent tooltip = Component.empty()
+                .append(this.definition.getNodeName(node).copy()
+                        .withStyle(node.major() ? ChatFormatting.GOLD : ChatFormatting.WHITE))
+                .append(Component.literal("\n"))
+                .append(this.definition.getNodeDescription(node).copy().withStyle(ChatFormatting.GRAY))
+                .append(Component.literal("\n"))
+                .append(Component.translatable(
+                        "screen.eightwastelands.xinfa.node.cost",
+                        node.wudaoSandCost()
+                ).withStyle(ChatFormatting.GRAY))
+                .append(Component.literal("\n"));
+
+        if (activatedNodeIds.contains(node.id())) {
+            tooltip.append(Component.translatable("screen.eightwastelands.xinfa.node.status.activated")
+                    .withStyle(ChatFormatting.DARK_GREEN));
+        } else if (node.canActivate(activatedNodeIds)) {
+            if (wudaoSandCount >= node.wudaoSandCost()) {
+                tooltip.append(Component.translatable("screen.eightwastelands.xinfa.node.status.available")
+                        .withStyle(ChatFormatting.DARK_AQUA));
+            } else {
+                tooltip.append(Component.translatable(
+                        "screen.eightwastelands.xinfa.node.status.not_enough_wudao_sand",
+                        wudaoSandCount,
+                        node.wudaoSandCost()
+                ).withStyle(ChatFormatting.RED));
             }
-
-            result.append(buildSingleBonusText(node.bonuses().get(index)));
+        } else {
+            tooltip.append(Component.translatable("screen.eightwastelands.xinfa.node.status.locked")
+                    .withStyle(ChatFormatting.DARK_GRAY));
         }
 
-        return result;
-    }
-
-    private Component buildSingleBonusText(XinfaBonus bonus) {
-        if (bonus.isAttributeBonus()) {
-            return Component.translatable(
-                    "screen.eightwastelands.xinfa.bonus." + bonus.attribute().name().toLowerCase(Locale.ROOT),
-                    isPercentAttribute(bonus) ? formatPercent(bonus.amount()) : formatAmount(bonus.amount())
-            );
-        }
-
-        XinfaSpecialAttribute specialAttribute = bonus.specialAttribute();
-        return Component.translatable(
-                "screen.eightwastelands.xinfa.bonus." + specialAttribute.getSerializedName(),
-                formatAmount(bonus.amount())
-        );
+        return tooltip;
     }
 
     private Component buildProgressText(int activatedCount) {
@@ -342,18 +341,4 @@ public class XinfaScreen extends Screen {
         return String.format(Locale.ROOT, "%.2f", amount);
     }
 
-    private static String formatPercent(double amount) {
-        return Integer.toString((int) Math.round(amount * 100.0D)) + "%";
-    }
-
-    private static boolean isPercentAttribute(XinfaBonus bonus) {
-        return switch (bonus.attribute()) {
-            case CRIT_CHANCE, CRIT_DAMAGE_ADDITIVE, VULNERABLE_DAMAGE_ADDITIVE,
-                 FIRE_DAMAGE_ADDITIVE, COLD_DAMAGE_ADDITIVE, LIGHTNING_DAMAGE_ADDITIVE,
-                 MAGIC_DAMAGE_ADDITIVE, WITHER_DAMAGE_ADDITIVE, POISON_DAMAGE_ADDITIVE,
-                 MELEE_DAMAGE_ADDITIVE, PROJECTILE_DAMAGE_ADDITIVE, KINETIC_DAMAGE_ADDITIVE,
-                 DODGE_CHANCE, HEALING_RECEIVED -> true;
-            default -> false;
-        };
-    }
 }

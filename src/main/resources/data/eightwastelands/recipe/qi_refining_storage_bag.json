@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "LCL",
+    "LHL"
+  ],
+  "key": {
+    "L": "minecraft:leather",
+    "C": "eightwastelands:qi_refining_monster_core",
+    "H": "eightwastelands:qi_refining_spirit_herb"
+  },
+  "result": {
+    "id": "eightwastelands:qi_refining_storage_bag",
+    "count": 1
+  }
+}

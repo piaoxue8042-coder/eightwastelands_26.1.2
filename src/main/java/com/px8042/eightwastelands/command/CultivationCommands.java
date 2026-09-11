@@ -15,6 +15,8 @@ import com.px8042.eightwastelands.cultivation.CultivationRealm;
 import com.px8042.eightwastelands.cultivation.CultivationSnapshot;
 import com.px8042.eightwastelands.cultivation.CultivationStage;
 import com.px8042.eightwastelands.item.pill.PillGrade;
+import com.px8042.eightwastelands.refining.RefiningManager;
+import com.px8042.eightwastelands.refining.RefiningMastery;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -37,6 +39,8 @@ public class CultivationCommands {
             new SimpleCommandExceptionType(Component.literal("Unknown cultivation realm."));
     private static final SimpleCommandExceptionType INVALID_MASTERY =
             new SimpleCommandExceptionType(Component.literal("Unknown alchemy mastery."));
+    private static final SimpleCommandExceptionType INVALID_REFINING_MASTERY =
+            new SimpleCommandExceptionType(Component.literal("Unknown refining mastery."));
     private static final SimpleCommandExceptionType INVALID_PILL_GRADE =
             new SimpleCommandExceptionType(Component.literal("Unknown pill grade."));
     private static final SimpleCommandExceptionType CANNOT_REFINE =
@@ -113,6 +117,27 @@ public class CultivationCommands {
                                                 .executes(CultivationCommands::recordRefine))))
                         .then(Commands.literal("clear")
                                 .executes(CultivationCommands::clearAlchemy)))
+                .then(Commands.literal("refining")
+                        .then(Commands.literal("get")
+                                .executes(CultivationCommands::getRefining))
+                        .then(Commands.literal("set_realm")
+                                .then(Commands.argument("realm", StringArgumentType.word())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(
+                                                Arrays.stream(CultivationRealm.values())
+                                                        .map(CultivationRealm::getSerializedName),
+                                                builder
+                                        ))
+                                        .executes(CultivationCommands::setRefiningRealm)))
+                        .then(Commands.literal("set_mastery")
+                                .then(Commands.argument("mastery", StringArgumentType.word())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(
+                                                Arrays.stream(RefiningMastery.values())
+                                                        .map(RefiningMastery::getSerializedName),
+                                                builder
+                                        ))
+                                        .executes(CultivationCommands::setRefiningMastery)))
+                        .then(Commands.literal("clear")
+                                .executes(CultivationCommands::clearRefining)))
                 .then(Commands.literal("entity_cultivation")
                         .then(Commands.literal("get")
                                 .then(Commands.argument("target", EntityArgument.entity())
@@ -261,6 +286,49 @@ public class CultivationCommands {
         ServerPlayer player = context.getSource().getPlayerOrException();
         AlchemyManager.clearForCommand(player);
         context.getSource().sendSuccess(() -> Component.literal("Cleared alchemy data."), false);
+        return 0;
+    }
+
+    private static int getRefining(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        context.getSource().sendSuccess(() -> Component.literal("Refining: ")
+                .append(RefiningManager.getRealm(player).getDisplayName())
+                .append(Component.literal(" - "))
+                .append(RefiningManager.getMastery(player).getDisplayName())
+                .append(Component.literal(" (" + RefiningManager.getExperience(player)
+                        + " / " + RefiningManager.getRequiredExperience(player) + ")")), false);
+        return RefiningManager.getMastery(player).getIndex();
+    }
+
+    private static int setRefiningRealm(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        CultivationRealm realm = CultivationRealm.bySerializedName(
+                StringArgumentType.getString(context, "realm")
+        ).orElseThrow(INVALID_REALM::create);
+        RefiningManager.setRealmForCommand(player, realm);
+        CultivationManager.syncTo(player);
+        context.getSource().sendSuccess(() -> Component.literal("Set refining realm to ")
+                .append(realm.getDisplayName()), false);
+        return realm.getIndex();
+    }
+
+    private static int setRefiningMastery(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        RefiningMastery mastery = RefiningMastery.bySerializedName(
+                StringArgumentType.getString(context, "mastery")
+        ).orElseThrow(INVALID_REFINING_MASTERY::create);
+        RefiningManager.setMasteryForCommand(player, mastery);
+        CultivationManager.syncTo(player);
+        context.getSource().sendSuccess(() -> Component.literal("Set refining mastery to ")
+                .append(mastery.getDisplayName()), false);
+        return mastery.getIndex();
+    }
+
+    private static int clearRefining(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        RefiningManager.clearForCommand(player);
+        CultivationManager.syncTo(player);
+        context.getSource().sendSuccess(() -> Component.literal("Cleared refining data."), false);
         return 0;
     }
 

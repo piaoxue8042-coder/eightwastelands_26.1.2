@@ -7,6 +7,7 @@ import com.px8042.eightwastelands.block.custom.AlchemyFurnaceBlock;
 import com.px8042.eightwastelands.cultivation.CultivationManager;
 import com.px8042.eightwastelands.cultivation.CultivationRealm;
 import com.px8042.eightwastelands.item.pill.PillGrade;
+import com.px8042.eightwastelands.item.storage.StorageBagContents;
 import com.px8042.eightwastelands.menu.AlchemyFurnaceMenu;
 import java.util.Optional;
 import java.util.UUID;
@@ -139,8 +140,16 @@ public class AlchemyFurnaceBlockEntity extends BaseContainerBlockEntity {
         }
 
         ItemStack result = formula.get().createResult(this.pendingGrade);
-        if (result.isEmpty() || !canAcceptResult(this.pendingGrade, result)) {
+        if (result.isEmpty()) {
             return changed;
+        }
+
+        ItemStack simulatedRemaining = StorageBagContents.simulateInsertIntoPlayerBags(
+                alchemist.getInventory(),
+                result
+        );
+        if (!simulatedRemaining.isEmpty() && !canAcceptResult(this.pendingGrade, simulatedRemaining)) {
+            return coolCookingProgress() || changed;
         }
 
         if (this.litTime <= 0 && !consumeFuel(level)) {
@@ -208,15 +217,30 @@ public class AlchemyFurnaceBlockEntity extends BaseContainerBlockEntity {
         }
 
         int outputIndex = outputIndexFor(this.pendingGrade);
-        if (outputIndex < 0 || !canAcceptResult(this.pendingGrade, result)) {
+        if (outputIndex < 0) {
             return;
         }
 
-        ItemStack output = this.items.get(outputIndex);
-        if (output.isEmpty()) {
-            this.items.set(outputIndex, result.copy());
-        } else {
-            output.grow(result.getCount());
+        ItemStack simulatedRemaining = StorageBagContents.simulateInsertIntoPlayerBags(
+                serverPlayer.getInventory(),
+                result
+        );
+        if (!simulatedRemaining.isEmpty() && !canAcceptResult(this.pendingGrade, simulatedRemaining)) {
+            return;
+        }
+
+        ItemStack remaining = StorageBagContents.insertIntoPlayerBags(serverPlayer.getInventory(), result);
+        if (!remaining.isEmpty() && !canAcceptResult(this.pendingGrade, remaining)) {
+            return;
+        }
+
+        if (!remaining.isEmpty()) {
+            ItemStack output = this.items.get(outputIndex);
+            if (output.isEmpty()) {
+                this.items.set(outputIndex, remaining.copy());
+            } else {
+                output.grow(remaining.getCount());
+            }
         }
 
         this.items.get(SLOT_INPUT).shrink(1);

@@ -3,6 +3,7 @@ package com.px8042.eightwastelands.block;
 import com.px8042.eightwastelands.EightWastelands;
 import com.px8042.eightwastelands.block.custom.AlchemyFurnaceBlock;
 import com.px8042.eightwastelands.block.custom.LouZhenBlock;
+import com.px8042.eightwastelands.block.custom.RefiningFurnaceBlock;
 import com.px8042.eightwastelands.block.custom.WealthTableBlock;
 import com.px8042.eightwastelands.cultivation.CultivationRealm;
 import net.minecraft.core.registries.Registries;
@@ -59,6 +60,13 @@ public class ModBlocks {
                                     BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                             ),
                             CultivationRealm.FOUNDATION_BUILDING
+                    ));
+
+    public static final DeferredBlock<Block> REFINING_FURNACE =
+            BLOCKS.register("refining_furnace",
+                    () -> new RefiningFurnaceBlock(
+                            blockProperties("refining_furnace", BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)),
+                            CultivationRealm.QI_REFINING
                     ));
 
     public static void register(IEventBus eventBus) {
